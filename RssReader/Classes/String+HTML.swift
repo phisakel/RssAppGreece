@@ -144,7 +144,10 @@ extension String {
         htmlString = htmlString.replacingOccurrences(of: "<li>", with: "\u{2022} ", options: .caseInsensitive)
         
         // Render article text with the system font
-        let textFont = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18.0)]
+        let textFont: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 18.0),
+            .foregroundColor: UIColor.label
+        ]
         let boldFont = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18.0)]
 
         // Strip off all HTML tags except H1, H2, H3, A, IMG and STRONG

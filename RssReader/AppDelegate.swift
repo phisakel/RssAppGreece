@@ -26,40 +26,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        do {
-            let storyboardName = UIDevice.current.userInterfaceIdiom == .pad ? "Main_iPad" : "Main_iPhone-3"
-            
-            // Change navigation bar appearance
-            if storyboardName == "Main_iPhone" || storyboardName == "Main_iPhone-2" || storyboardName == "Main_iPad" {
-                if ConfigurationManager.defaultTheme() == "dark" {
-                    UINavigationBar.appearance().barTintColor = UIColor(red: 0.0/255.0, green: 174.0/255.0, blue: 239.0/255.0, alpha: 1.0)
-                    UINavigationBar.appearance().tintColor = UIColor.white
-                    
-                    // Change status bar style
-                    UIApplication.shared.statusBarStyle = .lightContent
-                    
-                    // Default bar font
-                    let barFont = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
-                    UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white, NSAttributedString.Key.font:barFont]
-                    
-                    
-                } else if ConfigurationManager.defaultTheme() == "light" {
-                    UINavigationBar.appearance().barTintColor = UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0)
-                    UINavigationBar.appearance().tintColor = UIColor(red: 166.0/255.0, green: 37.0/255.0, blue: 15.0/255.0, alpha: 1.0)
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.configureWithOpaqueBackground()
+        navigationAppearance.backgroundColor = .systemBackground
+        navigationAppearance.titleTextAttributes = [
+            .foregroundColor: UIColor.label,
+            .font: UIFont.systemFont(ofSize: 17, weight: .semibold)
+        ]
+        UINavigationBar.appearance().standardAppearance = navigationAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationAppearance
+        UINavigationBar.appearance().compactAppearance = navigationAppearance
+        UINavigationBar.appearance().tintColor = .systemBlue
 
-                    //            UINavigationBar.appearance().tintColor = UIColor(red: 25.0/255.0, green: 150.0/255.0, blue: 93.0/255.0, alpha: 1.0)
-                    
-                    // Change status bar style
-                    UIApplication.shared.statusBarStyle = .default
-                    
-                    let barFont = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
-                    UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor(red: 166.0/255.0, green: 37.0/255.0, blue: 15.0/255.0, alpha: 1.0), NSAttributedString.Key.font:barFont]
-                    
-                }
-                
-            }
-        }
-        
         // Setup AdMob
         if ConfigurationManager.isHomeScreenAdsEnabled() || ConfigurationManager.isDetailViewAdsEnabled() {
             

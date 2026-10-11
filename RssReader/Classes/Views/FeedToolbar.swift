@@ -61,6 +61,10 @@ struct AddFeedSheet: View {
                     Text(errorMessage).foregroundStyle(.red).accessibilityIdentifier("rssFeedError")
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(Color(uiColor: .systemGroupedBackground))
+            .toolbarBackground(Color(uiColor: .systemGroupedBackground), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .navigationTitle("Add RSS Feed")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -74,6 +78,7 @@ struct AddFeedSheet: View {
                 }
             }
         }
+        .presentationBackground(Color(uiColor: .systemGroupedBackground))
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .interactiveDismissDisabled(isSaving)
@@ -105,6 +110,7 @@ extension UIViewController {
             self?.dismiss(animated: true) { onAdded(feed) }
         })
         host.modalPresentationStyle = .pageSheet
+        host.view.backgroundColor = .systemGroupedBackground
         host.sheetPresentationController?.detents = [.medium(), .large()]
         host.sheetPresentationController?.prefersGrabberVisible = true
         present(host, animated: true)

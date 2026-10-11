@@ -240,27 +240,15 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
         if ConfigurationManager.isDropdownMenuEnabled() {
             navigationItem.titleView = navigationHeaderButton;
             navigationHeaderButton.titleLabel?.font = UIFont.systemFont(ofSize: 17.0)
-            switch ConfigurationManager.defaultTheme() {
-                case "dark":
-                    navigationHeaderButton.tintColor = UIColor.white
-                case "light":
-                    navigationHeaderButton.tintColor = UIColor(red: 166.0/255.0, green: 37.0/255.0, blue: 15.0/255.0, alpha: 1.0)
-                default: break
-            }
+            navigationHeaderButton.tintColor = .systemBlue
             
         } else {
             navigationHeaderLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
             navigationHeaderLabel?.text = feedsURLs[0]["name"]!
             navigationHeaderLabel?.textAlignment = .center
             navigationHeaderLabel?.font = UIFont.systemFont(ofSize: 17.0)
-            switch ConfigurationManager.defaultTheme() {
-                case "dark":
-                    navigationHeaderLabel?.textColor = UIColor.white
-                case "light":
-                    navigationHeaderLabel?.textColor = UIColor(red: 166.0/255.0, green: 37.0/255.0, blue: 15.0/255.0, alpha: 1.0)
-                default: break
-            }
-            
+            navigationHeaderLabel?.textColor = .label
+
             navigationItem.titleView = navigationHeaderLabel
         }
         

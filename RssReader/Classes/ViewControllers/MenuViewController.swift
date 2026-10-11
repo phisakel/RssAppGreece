@@ -15,6 +15,7 @@ protocol MenuViewDelegate {
 class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SectionHeaderViewDelegate {
     @IBOutlet weak var tableView:UITableView!
     @IBOutlet weak var headerView:UIView!
+    @IBOutlet weak var closeButton: UIButton?
     
     let feedsURLs: [[String: String]] = ConfigurationManager.sharedConfigurationManager().feeds
     var isSectionExpanded:[Bool] = []
@@ -25,20 +26,18 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         tableView.sectionHeaderTopPadding = 0
         
-        // Set the menu background based on the preferred theme
-        switch ConfigurationManager.defaultTheme().lowercased() {
-        case "dark":
-            tableView.backgroundColor = FlatColor.darkOrange.color()
-            headerView.backgroundColor = FlatColor.darkOrange.color()
-            view.backgroundColor = FlatColor.darkOrange.color()
-        case "light":
-            tableView.backgroundColor = FlatColor.brightYellow.color()
-            headerView.backgroundColor = FlatColor.brightYellow.color()
-            view.backgroundColor = FlatColor.brightYellow.color()
-            
-        default: break
+        let menuBackground = UIColor { traits in
+            if traits.userInterfaceStyle == .dark { return .systemGroupedBackground }
+            return ConfigurationManager.defaultTheme().lowercased() == "dark"
+                ? FlatColor.darkOrange.color() : FlatColor.brightYellow.color()
         }
-        
+        tableView.backgroundColor = menuBackground
+        headerView.backgroundColor = menuBackground
+        view.backgroundColor = menuBackground
+        closeButton?.setImage(UIImage(systemName: "xmark"), for: .normal)
+        closeButton?.tintColor = .label
+        closeButton?.accessibilityLabel = "Close feeds"
+
         isSectionExpanded = [Bool](repeating: false, count: feedsURLs.count)
         
         // Hide status bar
@@ -109,16 +108,14 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             .scaledFont(for: .systemFont(ofSize: 17))
         cell.label.adjustsFontForContentSizeCategory = true
         
-        // Set the menu background based on the preferred theme
-        switch ConfigurationManager.defaultTheme().lowercased() {
-        case "dark":
-            cell.backgroundColor = FlatColor.paleOrange.color()
-        case "light":
-            cell.backgroundColor = FlatColor.paleYellow.color()
-        default: break
+        cell.label.textColor = .label
+        cell.contentView.backgroundColor = .clear
+        cell.backgroundColor = UIColor { traits in
+            if traits.userInterfaceStyle == .dark { return .secondarySystemGroupedBackground }
+            return ConfigurationManager.defaultTheme().lowercased() == "dark"
+                ? FlatColor.paleOrange.color() : FlatColor.paleYellow.color()
         }
 
-        
         // Get category and display the category feeds
         if let category = feedsURLs[indexPath.section]["name"] {
             let categoryFeeds = ConfigurationManager.getCategoryFeeds(category)

@@ -48,25 +48,10 @@ class SideMenuViewController: UITableViewController, SectionHeaderViewDelegate {
         
         tableView.dataSource = self
         
-        // Customize sidebar menu color
-//        tableView.backgroundColor = UIColor(red: 39.0/255.0, green: 44.0/255.0, blue: 48.0/255.0, alpha: 1.0)
-        
-        if ConfigurationManager.defaultTheme().lowercased() == "light" {
-            tableView.backgroundColor = UIColor.clear
-            tableView.backgroundView = UIImageView(image: UIImage(named: "nav_bg"))
-            let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.frame = view.bounds
-            tableView.backgroundView?.addSubview(blurEffectView)
-            tableView.separatorColor = UIColor.clear
-            
-        } else if ConfigurationManager.defaultTheme().lowercased() == "dark" {
-            tableView.backgroundColor = UIColor(red: 39.0/255.0, green: 44.0/255.0, blue: 48.0/255.0, alpha: 1.0)
-            tableView.separatorColor = UIColor(white: 0.15, alpha: 0.2)
-        }
-        
-//        tableView.separatorColor = UIColor(white: 0.15, alpha: 0.2)
-//        tableView.separatorColor = UIColor.clearColor()
+        tableView.backgroundView = nil
+        tableView.backgroundColor = .systemBackground
+        tableView.separatorColor = .separator
+        menuTitleLabel?.textColor = .label
 
         if menuTitleLabel != nil {
             menuTitleLabel.font = UIFont.systemFont(ofSize: 20.0)
@@ -127,14 +112,9 @@ class SideMenuViewController: UITableViewController, SectionHeaderViewDelegate {
         cell?.textLabel?.font = UIFont.systemFont(ofSize: 16.0)
         cell?.imageView?.image = UIImage(named: "nav_radio")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
         
-        // Highlight the selected category
-        if ConfigurationManager.defaultTheme() == "dark" {
-            cell?.imageView?.tintColor = (cell?.textLabel?.text == currentFeed?.title) ? UIColor(red: 0.0/255.0, green: 174.0/255.0, blue: 239.0/255.0, alpha: 1.0) : UIColor(white: 0.8, alpha: 0.9)
-            cell?.textLabel?.textColor = (cell?.textLabel?.text == currentFeed?.title) ? UIColor(red: 0.0/255.0, green: 174.0/255.0, blue: 239.0/255.0, alpha: 1.0) : UIColor(white: 0.8, alpha: 0.9)
-        } else if ConfigurationManager.defaultTheme() == "light" {
-            cell?.imageView?.tintColor = (cell?.textLabel?.text == currentFeed?.title) ? UIColor(red: 166.0/255.0, green: 37.0/255.0, blue: 15.0/255.0, alpha: 1.0) : UIColor.gray
-            cell?.textLabel?.textColor = (cell?.textLabel?.text == currentFeed?.title) ? UIColor(red: 166.0/255.0, green: 37.0/255.0, blue: 15.0/255.0, alpha: 1.0) : UIColor.gray
-        }
+        let color: UIColor = cell?.textLabel?.text == currentFeed?.title ? .systemBlue : .label
+        cell?.imageView?.tintColor = color
+        cell?.textLabel?.textColor = color
 
         // Transparent background
         cell?.backgroundColor = UIColor.clear
@@ -176,14 +156,9 @@ class SideMenuViewController: UITableViewController, SectionHeaderViewDelegate {
         headerView.sectionID = section
         headerView.delegate = self
         
-        if ConfigurationManager.defaultTheme() == "dark" {
-            let titleColor = (headerView.titleButton.titleLabel?.text == currentFeed?.title) ? UIColor(red: 0.0/255.0, green: 174.0/255.0, blue: 239.0/255.0, alpha: 1.0) : UIColor(white: 0.8, alpha: 0.9)
-            headerView.titleButton.setTitleColor(titleColor, for: UIControl.State())
-        } else if ConfigurationManager.defaultTheme() == "light" {
-            let titleColor = (headerView.titleButton.titleLabel?.text == currentFeed?.title) ? UIColor(red: 166.0/255.0, green: 37.0/255.0, blue: 15.0/255.0, alpha: 1.0) : UIColor.gray
-            headerView.titleButton.setTitleColor(titleColor, for: UIControl.State())
-        }
-        
+        let titleColor: UIColor = headerView.titleButton.titleLabel?.text == currentFeed?.title ? .systemBlue : .label
+        headerView.titleButton.setTitleColor(titleColor, for: .normal)
+
         return headerView
     }
 
