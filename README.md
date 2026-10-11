@@ -34,3 +34,23 @@ Validated with Xcode 27: seventeen tests passed on the iOS 27 simulator; the uns
 Tap **+** in the top toolbar, paste an HTTP/HTTPS RSS or Atom URL, and optionally enter a name. The app checks the feed, rejects duplicates, saves the subscription in SwiftData, and opens it. Added feeds remain in **Οι ροές μου** after relaunch. The toolbar uses an opaque system background and default system fonts. The iPad navigation bar also provides an add-feed button.
 
 On iOS 27, the top toolbar hides when scrolling down and returns when scrolling up or reaching the top. Feed changes restore it. Reduce Motion disables the slide animation.
+
+## App Store Connect
+
+The app record is RSS Greece (`6821728687`), bundle ID `gr.phisakel.RssAppGreece`, with Greek as its primary language. Signing uses team `5T7UHW36CL`.
+
+Use the checked-in asc workflow to archive, export an App Store IPA, upload it, wait for processing, and attach it to the version:
+
+```sh
+asc workflow validate
+asc workflow run --dry-run publish-appstore-connect
+asc workflow run publish-appstore-connect
+```
+
+The workflow chooses the next remote-safe build number. Archives, IPAs, and run state are ignored by Git. For subsequent runs, supply fresh artifact paths (existing artifacts are preserved):
+
+```sh
+asc workflow run publish-appstore-connect ARCHIVE_PATH:.asc/artifacts/RssReader-next.xcarchive IPA_PATH:.asc/artifacts/RssReader-next.ipa
+```
+
+A failed run with completed checkpoints can be resumed using its run ID. This workflow uploads and stages the build in App Store Connect; review submission is a separate step after completing store metadata, privacy details, and screenshots.
