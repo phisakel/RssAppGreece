@@ -1,0 +1,37 @@
+{
+  "env": {
+    "APP_ID": "6821728687",
+    "TEAM_ID": "5T7UHW36CL",
+    "VERSION": "1.7",
+    "ARCHIVE_PATH": ".asc/artifacts/RssReader.xcarchive",
+    "IPA_PATH": ".asc/artifacts/RssReader.ipa"
+  },
+  "before_all": "asc auth status",
+  "workflows": {
+    "publish-appstore-connect": {
+      "description": "Archive, export, upload and attach the processed build to an App Store Connect version",
+      "steps": [
+        {
+          "name": "check_app",
+          "run": "test -n \"$APP_ID\" && asc apps view --id \"$APP_ID\" --output json"
+        },
+        {
+          "name": "set_build_number",
+          "run": "asc xcode version edit --project RssReader.xcodeproj --target RssReader --version \"$VERSION\" --next-build-number --app \"$APP_ID\" --platform IOS --output json"
+        },
+        {
+          "name": "archive",
+          "run": "asc xcode archive --project RssReader.xcodeproj --scheme RssReader --configuration Release --archive-path \"$ARCHIVE_PATH\" --xcodebuild-flag=-destination --xcodebuild-flag=generic/platform=iOS --xcodebuild-flag=-allowProvisioningUpdates --xcodebuild-flag=DEVELOPMENT_TEAM=\"$TEAM_ID\" --xcodebuild-flag=CODE_SIGN_STYLE=Automatic --xcodebuild-flag=CODE_SIGN_IDENTITY=\"Apple Development\" --output json"
+        },
+        {
+          "name": "export",
+          "run": "asc xcode export --archive-path \"$ARCHIVE_PATH\" --ipa-path \"$IPA_PATH\" --team-id \"$TEAM_ID\" --xcodebuild-flag=-allowProvisioningUpdates --output json"
+        },
+        {
+          "name": "publish",
+          "run": "asc publish appstore --app \"$APP_ID\" --ipa \"$IPA_PATH\" --version \"$VERSION\" --wait --timeout 30m --output json"
+        }
+      ]
+    }
+  }
+}
