@@ -1,0 +1,14 @@
+schemaVersion: 1
+enabledWorkflows:
+  - simulator
+debug: true
+sentryDisabled: false
+setupPreferences:
+  platforms:
+    - iOS
+sessionDefaults:
+  projectPath: RssReader.xcodeproj
+  scheme: RssReader
+  simulatorId: 31393A75-B401-40AE-A284-2B25DC04699C
+  simulatorName: iPhone 18 Pro Max
+  simulatorPlatform: iOS Simulator
