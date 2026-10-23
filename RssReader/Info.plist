@@ -253,6 +253,10 @@
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main_iPhone-3</string>
+	<key>UIMainStoryboardFile~ipad</key>
+	<string>Main_iPad</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>
@@ -275,9 +279,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIMainStoryboardFile</key>
-	<string>Main_iPhone-3</string>
-	<key>UIMainStoryboardFile~ipad</key>
-	<string>Main_iPad</string>
 </dict>
 </plist>

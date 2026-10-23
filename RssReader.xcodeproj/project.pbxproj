@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		D820E8A0EA9F40C827B6A921 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 8D324AE87AEE536E0DCE4120 /* SDWebImage */; };
 		E12A8D14AC9CAC4A8E466F2C /* ArticleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023509ED40AECA1A64EC5FEF /* ArticleStore.swift */; };
 		E8DC69F73F85C5177997B278 /* SWRevealViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 444E53B65D1640571D7B743F /* SWRevealViewController */; };
+		ED0B7568FA2B44C981530EEB /* FeedToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730F539754DB46828C6C92E0 /* FeedToolbar.swift */; };
 		F219FD0F1A21D2680028EF72 /* DropdownMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F219FD0E1A21D2680028EF72 /* DropdownMenuItem.swift */; };
 		F253771F1A1E149D008B1171 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F253771E1A1E149D008B1171 /* AppDelegate.swift */; };
 		F25377241A1E149D008B1171 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F25377221A1E149D008B1171 /* Main_iPhone.storyboard */; };
@@ -60,7 +61,6 @@
 		F4E173D51AF759EB00E9B99E /* SlideUpTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E173D41AF759EB00E9B99E /* SlideUpTransitionAnimator.swift */; };
 		F4E173DA1AF89FB800E9B99E /* SafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E173D91AF89FB800E9B99E /* SafariActivity.swift */; };
 		FBCE1101297F45DAA919D0F7 /* FeedSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B351A3BDCEC44F8849EA59D /* FeedSubscription.swift */; };
-		ED0B7568FA2B44C981530EEB /* FeedToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730F539754DB46828C6C92E0 /* FeedToolbar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +75,9 @@
 
 /* Begin PBXFileReference section */
 		023509ED40AECA1A64EC5FEF /* ArticleStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ArticleStore.swift; path = RssReader/Classes/SharedInstances/ArticleStore.swift; sourceTree = "<group>"; };
+		0B351A3BDCEC44F8849EA59D /* FeedSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedSubscription.swift; path = RssReader/Classes/Models/FeedSubscription.swift; sourceTree = "<group>"; };
 		529C25CF9189D4D59280A0B5 /* FeedsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsService.swift; sourceTree = "<group>"; };
+		730F539754DB46828C6C92E0 /* FeedToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedToolbar.swift; path = RssReader/Classes/Views/FeedToolbar.swift; sourceTree = "<group>"; };
 		7E2AC42F49DF642227DC3F77 /* SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = RssReader/SceneDelegate.swift; sourceTree = "<group>"; };
 		80C530040F490BF74FB7BB65 /* StoredArticle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoredArticle.swift; path = RssReader/Classes/Models/StoredArticle.swift; sourceTree = "<group>"; };
 		F219FD0E1A21D2680028EF72 /* DropdownMenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropdownMenuItem.swift; path = ../DropdownMenuItem.swift; sourceTree = "<group>"; };
@@ -127,8 +129,6 @@
 		F4E173CF1AF5CE2100E9B99E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Base.lproj/Main_iPhone-2.storyboard"; sourceTree = "<group>"; };
 		F4E173D41AF759EB00E9B99E /* SlideUpTransitionAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideUpTransitionAnimator.swift; sourceTree = "<group>"; };
 		F4E173D91AF89FB800E9B99E /* SafariActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafariActivity.swift; sourceTree = "<group>"; };
-		0B351A3BDCEC44F8849EA59D /* FeedSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedSubscription.swift; path = RssReader/Classes/Models/FeedSubscription.swift; sourceTree = "<group>"; };
-		730F539754DB46828C6C92E0 /* FeedToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedToolbar.swift; path = RssReader/Classes/Views/FeedToolbar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -530,7 +530,7 @@
 			packageReferences = (
 				58AB5D741C76E424193519CA /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				1622A1DE53D88C528C3E8CF4 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
-				15C3DD2B48031E1B7A517AC9 /* XCLocalSwiftPackageReference "LegacyReaderUI" */,
+				15C3DD2B48031E1B7A517AC9 /* XCLocalSwiftPackageReference "Packages/LegacyReaderUI" */,
 			);
 			productRefGroup = F253771A1A1E149D008B1171 /* Products */;
 			projectDirPath = "";
@@ -770,7 +770,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -783,14 +784,17 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5T7UHW36CL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RssReader/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.7;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5T7UHW36CL;
-				CODE_SIGN_STYLE = Automatic;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -812,14 +816,17 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5T7UHW36CL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RssReader/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.7;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5T7UHW36CL;
-				CODE_SIGN_STYLE = Automatic;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -845,7 +852,11 @@
 				);
 				INFOPLIST_FILE = RssReaderTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -865,7 +876,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = RssReaderTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -911,7 +926,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		15C3DD2B48031E1B7A517AC9 /* XCLocalSwiftPackageReference "LegacyReaderUI" */ = {
+		15C3DD2B48031E1B7A517AC9 /* XCLocalSwiftPackageReference "Packages/LegacyReaderUI" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/LegacyReaderUI;
 		};
