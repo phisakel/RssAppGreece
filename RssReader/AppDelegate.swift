@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMobileAds
+import UserMessagingPlatform
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,11 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().compactAppearance = navigationAppearance
         UINavigationBar.appearance().tintColor = .systemBlue
 
-        // Setup AdMob
-        if ConfigurationManager.isHomeScreenAdsEnabled() || ConfigurationManager.isDetailViewAdsEnabled() {
-            
-            MobileAds.shared.start(completionHandler: nil)
-        }
+        // AdMob starts after the first visible placement gathers consent.
         
         // To fix the background color issue of the menu table view
         if #available(iOS 14.0, *) {
@@ -86,5 +83,159 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+}
+
+/// Serializes consent and SDK startup across the iPhone and iPad placements.
+@MainActor
+final class AdMobManager {
+    static let shared = AdMobManager()
+
+    private final class Placement {
+        weak var banner: BannerView?
+        weak var controller: UIViewController?
+        weak var table: UITableView?
+        var requestedSize: CGSize?
+        var isPreparing = false
+
+        init(banner: BannerView, controller: UIViewController, table: UITableView?) {
+            self.banner = banner
+            self.controller = controller
+            self.table = table
+        }
+    }
+
+    private var preparation: Task<Void, Never>?
+    private var sdkStartup: Task<Void, Never>?
+    private var placements: [Placement] = []
+    private var isPresentingPrivacyOptions = false
+
+    var privacyOptionsRequired: Bool {
+        ConsentInformation.shared.privacyOptionsRequirementStatus == .required
+    }
+
+    var canDisplayAds: Bool {
+        ConsentInformation.shared.canRequestAds && !isPresentingPrivacyOptions
+    }
+
+    func didFail(_ banner: BannerView) {
+        // A failed placement can retry when its screen next appears.
+        placements.first { $0.banner === banner }?.requestedSize = nil
+    }
+
+    func load(_ banner: BannerView, from controller: UIViewController, table: UITableView? = nil) {
+        guard controller.viewIfLoaded?.window != nil, !isPresentingPrivacyOptions else { return }
+        placements.removeAll { $0.banner == nil || $0.controller == nil }
+        let placement: Placement
+        if let existing = placements.first(where: { $0.banner === banner }) {
+            placement = existing
+        } else {
+            placement = Placement(banner: banner, controller: controller, table: table)
+            placements.append(placement)
+        }
+        guard !placement.isPreparing else { return }
+        placement.isPreparing = true
+
+        Task { [weak self, weak controller, weak banner] in
+            guard let self, let controller, let banner else { return }
+            defer { placement.isPreparing = false }
+            await prepare(from: controller)
+            updatePrivacyButton(for: placement)
+            guard controller.viewIfLoaded?.window != nil,
+                  controller.presentedViewController == nil,
+                  !isPresentingPrivacyOptions,
+                  ConsentInformation.shared.canRequestAds else { return }
+            await startSDK()
+            guard canDisplayAds, controller.viewIfLoaded?.window != nil else { return }
+
+            let width = floor((table?.bounds.width ?? controller.view.bounds.width)
+                - controller.view.safeAreaInsets.left - controller.view.safeAreaInsets.right)
+            guard width > 0 else { return }
+            let size = largeAnchoredAdaptiveBanner(width: width)
+            guard placement.requestedSize != size.size else { return }
+            placement.requestedSize = size.size
+            banner.adSize = size
+            banner.load(Request())
+        }
+    }
+
+    private func prepare(from controller: UIViewController) async {
+        if let preparation {
+            await preparation.value
+            return
+        }
+        let task = Task { @MainActor in
+            do {
+                try await ConsentInformation.shared.requestConsentInfoUpdate(with: RequestParameters())
+                try await ConsentForm.loadAndPresentIfRequired(from: controller)
+            } catch {
+                // UMP may still permit ads using a previous session's consent.
+                print("AdMob consent: \(error.localizedDescription)")
+            }
+        }
+        preparation = task
+        await task.value
+    }
+
+    private func startSDK() async {
+        if let sdkStartup {
+            await sdkStartup.value
+            return
+        }
+        let task = Task { @MainActor in
+            await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+                MobileAds.shared.start { _ in continuation.resume() }
+            }
+        }
+        sdkStartup = task
+        await task.value
+    }
+
+    private func updatePrivacyButton(for placement: Placement) {
+        guard let table = placement.table else { return }
+        guard privacyOptionsRequired else {
+            if table.tableFooterView?.accessibilityIdentifier == "adPrivacyOptions" {
+                table.tableFooterView = nil
+            }
+            return
+        }
+        guard table.tableFooterView?.accessibilityIdentifier != "adPrivacyOptions" else { return }
+        let button = UIButton(type: .system)
+        button.setTitle("Απόρρητο διαφημίσεων", for: .normal)
+        button.accessibilityIdentifier = "adPrivacyOptions"
+        button.frame = CGRect(x: 0, y: 0, width: table.bounds.width, height: 52)
+        button.addAction(UIAction { [weak self, weak controller = placement.controller] _ in
+            guard let controller else { return }
+            self?.presentPrivacyOptions(from: controller)
+        }, for: .touchUpInside)
+        table.tableFooterView = button
+    }
+
+    func presentPrivacyOptions(from controller: UIViewController) {
+        guard privacyOptionsRequired, !isPresentingPrivacyOptions else { return }
+        isPresentingPrivacyOptions = true
+        Task {
+            do {
+                try await ConsentForm.presentPrivacyOptionsForm(from: controller)
+            } catch {
+                let alert = UIAlertController(title: "Απόρρητο διαφημίσεων", message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                controller.present(alert, animated: true)
+            }
+            // Discard old creatives after a privacy choice and refresh visible placements.
+            for placement in placements {
+                placement.requestedSize = nil
+                guard let banner = placement.banner else { continue }
+                banner.removeFromSuperview()
+                banner.delegate?.bannerView?(banner, didFailToReceiveAdWithError:
+                    NSError(domain: "AdMobPrivacyChanged", code: 0))
+                updatePrivacyButton(for: placement)
+            }
+            isPresentingPrivacyOptions = false
+            for placement in placements {
+                guard let banner = placement.banner, let owner = placement.controller else { continue }
+                load(banner, from: owner, table: placement.table)
+            }
+        }
+    }
 }
 

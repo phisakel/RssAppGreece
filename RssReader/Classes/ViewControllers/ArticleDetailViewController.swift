@@ -19,7 +19,7 @@ class ArticleDetailViewController: UIViewController {
     @IBOutlet var loadingIndicator: UIImageView!
     
     lazy var adBannerView: BannerView? = {
-        let adBannerView = BannerView(adSize: currentOrientationAnchoredAdaptiveBanner(width: view.bounds.width))
+        let adBannerView = BannerView()
         adBannerView.adUnitID = ConfigurationManager.admobAdUnitId()
         adBannerView.delegate = self
         adBannerView.rootViewController = self
@@ -27,8 +27,18 @@ class ArticleDetailViewController: UIViewController {
         return adBannerView
     }()
     
-    fileprivate var hasSetWebViewContentInset = false
+    private var bannerHeight: CGFloat = 0
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if adBannerView?.superview != nil { loadAdBanner() }
+    }
+
+    private func loadAdBanner() {
+        guard ConfigurationManager.isDetailViewAdsEnabled(), let banner = adBannerView else { return }
+        AdMobManager.shared.load(banner, from: self, table: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if let article {
@@ -72,13 +82,12 @@ class ArticleDetailViewController: UIViewController {
             }
         }
         
-        // Enable iAd (depends on the settings)
-        if ConfigurationManager.isDetailViewAdsEnabled() {
-            adBannerView?.load(Request())
-        }
+
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadAdBanner()
         navigationController?.hidesBarsOnSwipe = true
     }
 
@@ -127,38 +136,30 @@ extension ArticleDetailViewController: UIScrollViewDelegate {
 
 extension ArticleDetailViewController: BannerViewDelegate {
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        print("Banner loaded successfully")
-        
-        guard let adBannerView = adBannerView else {
-            return
+        guard AdMobManager.shared.canDisplayAds else { return }
+        if bannerView.superview == nil {
+            bannerView.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(bannerView)
+            NSLayoutConstraint.activate([
+                bannerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                bannerView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
+            ])
         }
-        
-        webView.addSubview(adBannerView)
-        
-        // To prevent the banner ad from blocking the content
-        // The contentInset should be changed once when the ad banner is first loaded.
-        // We don't want to change it again when the ad is reloaded.
-        if !hasSetWebViewContentInset {
-            webView.scrollView.contentInset = UIEdgeInsets(top: webView.scrollView.contentInset.top, left: webView.scrollView.contentInset.left, bottom: webView.scrollView.contentInset.bottom + adBannerView.bounds.height, right: webView.scrollView.contentInset.right)
-            hasSetWebViewContentInset = true
-        }
-        
-        // Auto layout constraints for the ad banner
-        // It is placed at the bottom of the screen (or web view)
-        adBannerView.translatesAutoresizingMaskIntoConstraints = false
-        let bottomSpaceConstraint = NSLayoutConstraint(item: adBannerView, attribute: .bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.webView, attribute: .bottom, multiplier: 1.0, constant: 0)
-        bottomSpaceConstraint.isActive = true
-        let leadingSpaceConstraint = NSLayoutConstraint(item: adBannerView, attribute: .leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.webView, attribute: .leading, multiplier: 1.0, constant: 0)
-        leadingSpaceConstraint.isActive = true
-        let trailingSpaceConstraint = NSLayoutConstraint(item: adBannerView, attribute: .trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.webView, attribute: .trailing, multiplier: 1.0, constant: 0)
-        trailingSpaceConstraint.isActive = true
-
-
+        setBannerHeight(bannerView.adSize.size.height)
     }
     
     func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
+        AdMobManager.shared.didFail(bannerView)
+        bannerView.removeFromSuperview()
+        setBannerHeight(0)
         print("Fail to receive ads")
         print(error)
+    }
+
+    private func setBannerHeight(_ height: CGFloat) {
+        webView.scrollView.contentInset.bottom += height - bannerHeight
+        webView.scrollView.verticalScrollIndicatorInsets.bottom += height - bannerHeight
+        bannerHeight = height
     }
 
 }

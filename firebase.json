@@ -1,0 +1,18 @@
+{
+  "hosting": {
+    "public": "web",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "redirects": [{"source": "/", "destination": "/privacy", "type": 302}],
+    "headers": [{
+      "source": "**",
+      "headers": [
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+        {"key": "Content-Security-Policy", "value": "default-src 'none'; style-src 'self' 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"},
+        {"key": "Cache-Control", "value": "public, max-age=300"}
+      ]
+    }]
+  }
+}

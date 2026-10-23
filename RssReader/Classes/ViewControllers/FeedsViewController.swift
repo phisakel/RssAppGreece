@@ -214,7 +214,7 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
     }()
     
     lazy var adBannerView: BannerView? = {
-        let adBannerView = BannerView(adSize: currentOrientationAnchoredAdaptiveBanner(width: view.bounds.width))
+        let adBannerView = BannerView()
         adBannerView.adUnitID = ConfigurationManager.admobAdUnitId()
         adBannerView.delegate = self
         adBannerView.rootViewController = self
@@ -224,6 +224,16 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
     
     
     // MARK: - ViewController overrides
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if adBannerView?.superview != nil { loadAdBanner() }
+    }
+
+    private func loadAdBanner() {
+        guard ConfigurationManager.isHomeScreenAdsEnabled(), let banner = adBannerView else { return }
+        AdMobManager.shared.load(banner, from: self, table: tableView)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad();
         navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .add, primaryAction: UIAction { [weak self] _ in
@@ -284,10 +294,7 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
         // Define table view delegate
         tableView.dataSource = self.dataSource
         
-        // Enable Ad (depending on the settings)
-        if ConfigurationManager.isHomeScreenAdsEnabled() {
-            print("Google Mobile Ads SDK version: \(MobileAds.shared.versionNumber)")
-        }
+
 
         // Enable self sizing cells
         self.tableView.rowHeight = UITableView.automaticDimension
@@ -297,6 +304,7 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        loadAdBanner()
         navigationController?.hidesBarsOnSwipe = false
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -360,12 +368,7 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
                 self.navigationHeaderLabel?.text = menuTitle
             }
             
-            // Enable banner ad
-            if ConfigurationManager.isHomeScreenAdsEnabled() {
-                self.adBannerView?.load(Request())
-                print("Request ad banner")
-                print("Ad unit ID: \(self.adBannerView?.adUnitID ?? "")")
-            }
+
 
         }) { (error: Error) -> (Void) in
             print("Error: \(error.localizedDescription)", terminator: "")
@@ -432,24 +435,20 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
     // MARK: - Google Admob
     
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        print("Banner loaded successfully")
-
-        // Reset the content offset
-        tableView.contentOffset = CGPoint(x: 0, y: -tableView.contentInset.top)
-
-        // Reposition the banner ad to create a slide down effect
-        let translateTransform = CGAffineTransform(translationX: 0, y: -bannerView.bounds.size.height)
-        bannerView.transform = translateTransform
-        
-        UIView.animate(withDuration: 0.5, animations: {
-            self.tableView.tableHeaderView?.frame = bannerView.frame
-            bannerView.transform = CGAffineTransform.identity
-            self.tableView.tableHeaderView = bannerView
-        }) 
-
+        guard AdMobManager.shared.canDisplayAds else { return }
+        // Keep the reader's scroll position when an ad refreshes.
+        bannerView.frame.size = bannerView.adSize.size
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: bannerView.bounds.height))
+        bannerView.center = CGPoint(x: container.bounds.midX, y: container.bounds.midY)
+        bannerView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+        container.addSubview(bannerView)
+        tableView.tableHeaderView = container
     }
-    
+
     func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
+        AdMobManager.shared.didFail(bannerView)
+        bannerView.removeFromSuperview()
+        tableView.tableHeaderView = nil
         print("Fail to receive ads")
         print(error)
     }

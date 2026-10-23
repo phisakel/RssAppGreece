@@ -90,11 +90,15 @@ class ConfigurationManager: NSObject {
     }
     
     class func admobAppId() -> String {
-        return ConfigurationManager.sharedConfigurationManager().configuration?.object(forKey: "AdmobAppId") as! String
+        return Bundle.main.object(forInfoDictionaryKey: "GADApplicationIdentifier") as? String ?? ""
     }
     
     class func admobAdUnitId() -> String {
-        return ConfigurationManager.sharedConfigurationManager().configuration?.object(forKey: "AdmobAdUnitId") as! String
+        #if DEBUG
+        return "ca-app-pub-3940256099942544/2435281174"
+        #else
+        return ConfigurationManager.sharedConfigurationManager().configuration?.object(forKey: "AdmobAdUnitId") as? String ?? ""
+        #endif
     }
 
 }

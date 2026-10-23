@@ -29,7 +29,7 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
 
     // Ad Banner
     lazy var adBannerView: BannerView? = {
-        let adBannerView = BannerView(adSize: currentOrientationAnchoredAdaptiveBanner(width: view.bounds.width))
+        let adBannerView = BannerView()
         adBannerView.adUnitID = ConfigurationManager.admobAdUnitId()
         adBannerView.delegate = self
         adBannerView.rootViewController = self
@@ -40,6 +40,16 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
     
     fileprivate var isDragged = false
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadAdBanner()
+    }
+
+    private func loadAdBanner() {
+        guard ConfigurationManager.isDetailViewAdsEnabled(), let banner = adBannerView else { return }
+        AdMobManager.shared.load(banner, from: self, table: tableView)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if let article {
@@ -83,15 +93,11 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
             }
         }
         
-        // Enable Ad (depending on the settings)
-        if ConfigurationManager.isDetailViewAdsEnabled() {
-//            adBannerView = ADBannerView(adType: ADAdType.Banner)
-//            adBannerView?.delegate = self
-            adBannerView?.load(Request())
-        }
+
     }
     
     override func viewDidLayoutSubviews() {
+        if adBannerView?.superview != nil { loadAdBanner() }
         super.viewDidLayoutSubviews()
         updateHeaderView()
     }
@@ -349,24 +355,20 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: - Google Admob
     
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        print("Banner loaded successfully")
-        
-        // Reset the content offset
-        tableView.contentOffset = CGPoint(x: 0, y: -tableView.contentInset.top)
-        
-        // Reposition the banner ad to create a slide down effect
-        let translateTransform = CGAffineTransform(translationX: bannerView.bounds.size.width, y: 0)
-        bannerView.transform = translateTransform
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            self.tableView.tableHeaderView?.frame = bannerView.frame
-            bannerView.transform = CGAffineTransform.identity
-            self.tableView.tableHeaderView = bannerView
-        }) 
-        
+        guard AdMobManager.shared.canDisplayAds else { return }
+        // Keep the reader's scroll position when an ad refreshes.
+        bannerView.frame.size = bannerView.adSize.size
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: bannerView.bounds.height))
+        bannerView.center = CGPoint(x: container.bounds.midX, y: container.bounds.midY)
+        bannerView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+        container.addSubview(bannerView)
+        tableView.tableHeaderView = container
     }
-    
+
     func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
+        AdMobManager.shared.didFail(bannerView)
+        bannerView.removeFromSuperview()
+        tableView.tableHeaderView = nil
         print("Fail to receive ads")
         print(error)
     }

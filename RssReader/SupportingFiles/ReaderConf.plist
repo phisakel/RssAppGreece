@@ -7,13 +7,11 @@
 	<key>DropdownMenu</key>
 	<true/>
 	<key>HomeScreenAdsEnabled</key>
-	<false/>
+	<true/>
 	<key>DetailViewAdsEnabled</key>
-	<false/>
-	<key>AdmobAppId</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<true/>
 	<key>AdmobAdUnitId</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<string>ca-app-pub-6881531620633926/9627200190</string>
 	<key>DisplayMode</key>
 	<string>Image</string>
 	<key>Feeds</key>
