@@ -34,7 +34,19 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Οικονομία</string>
+			<key>url</key>
+			<string>CategoryFeed</string>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Υγεία &amp; Ευεξία</string>
+			<key>url</key>
+			<string>CategoryFeed</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Γυναίκα</string>
 			<key>url</key>
 			<string>CategoryFeed</string>
 		</dict>
@@ -86,13 +98,40 @@
 				<string>https://www.kathimerini.gr/infeeds/rss/nx-rss-feed.xml</string>
 			</dict>
 		</array>
+		<key>Οικονομία</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>Ναυτεμπορική – Οικονομία</string>
+				<key>url</key>
+				<string>https://www.naftemporiki.gr/finance/feed/</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Οικονομικός Ταχυδρόμος</string>
+				<key>url</key>
+				<string>https://www.ot.gr/feed/</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Newmoney</string>
+				<key>url</key>
+				<string>https://www.newmoney.gr/feed/</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Insider</string>
+				<key>url</key>
+				<string>https://www.insider.gr/rss.xml</string>
+			</dict>
+		</array>
 		<key>Υγεία &amp; Ευεξία</key>
 		<array>
 			<dict>
 				<key>name</key>
-				<string>Ygeiamou</string>
+				<string>Iatropedia</string>
 				<key>url</key>
-				<string>https://www.ygeiamou.gr/feed/</string>
+				<string>https://www.iatropedia.gr/feed/</string>
 			</dict>
 			<dict>
 				<key>name</key>
@@ -105,6 +144,33 @@
 				<string>Shape</string>
 				<key>url</key>
 				<string>https://www.shape.gr/newsfeed/rss</string>
+			</dict>
+		</array>
+		<key>Γυναίκα</key>
+		<array>
+			<dict>
+				<key>name</key>
+				<string>LadyLike</string>
+				<key>url</key>
+				<string>https://www.ladylike.gr/feed/</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Marie Claire</string>
+				<key>url</key>
+				<string>https://www.marieclaire.gr/feed/</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Bovary</string>
+				<key>url</key>
+				<string>https://www.bovary.gr/rss.xml</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>Jenny.gr</string>
+				<key>url</key>
+				<string>https://jenny.gr/rss.xml</string>
 			</dict>
 		</array>
 		<key>Τεχνολογία</key>

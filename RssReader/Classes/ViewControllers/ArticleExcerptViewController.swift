@@ -306,7 +306,6 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
             destinationViewController = segue.destination as! ArticleDetailViewController
             destinationViewController.article = article // selectedArticle
 
-            UIApplication.shared.setStatusBarHidden(true, with: UIStatusBarAnimation.slide)
             destinationViewController.transitioningDelegate = transitionAnimator
             destinationViewController.modalPresentationStyle = .fullScreen
         
@@ -317,7 +316,6 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
             articleToDisplay.link = tappedLink
             destinationViewController.article = articleToDisplay // selectedArticle
             
-            UIApplication.shared.setStatusBarHidden(true, with: UIStatusBarAnimation.slide)
             destinationViewController.transitioningDelegate = transitionAnimator
             destinationViewController.modalPresentationStyle = .fullScreen
         }
@@ -325,9 +323,7 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     @IBAction func unwindToExcerptScreen(_ segue: UIStoryboardSegue) {
-        if UIApplication.shared.isStatusBarHidden {
-            UIApplication.shared.setStatusBarHidden(false, with: UIStatusBarAnimation.slide)
-        }
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     // Action method for activating the share actions

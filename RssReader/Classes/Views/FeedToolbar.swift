@@ -14,6 +14,7 @@ struct FeedToolbar: View {
         HStack(spacing: 12) {
             Button(action: showMenu) { Image(systemName: "line.3.horizontal").frame(width: 44, height: 44) }
                 .accessibilityLabel("Feeds")
+                .padding(.leading, 6)
             Text(title).font(.headline).lineLimit(1).frame(maxWidth: .infinity)
             Button(action: addFeed) { Image(systemName: "plus").frame(width: 44, height: 44) }
                 .accessibilityLabel("Add RSS Feed")

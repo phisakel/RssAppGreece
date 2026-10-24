@@ -13,7 +13,7 @@ import GoogleMobileAds
 class ArticleDetailViewController: UIViewController {
 
     var article: Article?
-    var statusBarHidden = false
+    override var prefersStatusBarHidden: Bool { true }
     
     @IBOutlet var webView: WKWebView!
     @IBOutlet var loadingIndicator: UIImageView!
@@ -62,7 +62,10 @@ class ArticleDetailViewController: UIViewController {
         
         // Load the web content
         self.webView.navigationDelegate = self
-        self.webView.scrollView.delegate = self
+        webView.backgroundColor = .systemBackground
+        webView.underPageBackgroundColor = .systemBackground
+        webView.scrollView.contentInsetAdjustmentBehavior = .automatic
+        webView.allowsBackForwardNavigationGestures = true
         if var articlelink = article?.link {
             
             // In case the link is missing, we use the GUID instead
@@ -113,25 +116,6 @@ class ArticleDetailViewController: UIViewController {
         self.present(activityViewController, animated: true, completion: nil)
     }
     
-    // Toggle the status bar
-    // - Hide the status bar when the navigation bar is hidden
-    // - Show the status bar when the navigation bar is displayed
-    func toggleStatusBar() {
-        if let navigationBarHidden = navigationController?.isNavigationBarHidden {
-            if navigationBarHidden && !UIApplication.shared.isStatusBarHidden {
-                UIApplication.shared.setStatusBarHidden(true, with: UIStatusBarAnimation.fade)
-            } else if !navigationBarHidden && UIApplication.shared.isStatusBarHidden {
-                UIApplication.shared.setStatusBarHidden(false, with: UIStatusBarAnimation.fade)
-            }
-        }
-    }
-}
-
-
-extension ArticleDetailViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        toggleStatusBar()
-    }
 }
 
 extension ArticleDetailViewController: BannerViewDelegate {

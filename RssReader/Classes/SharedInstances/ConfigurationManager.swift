@@ -16,8 +16,7 @@ class ConfigurationManager: NSObject {
     var feeds: [[String: String]] {
         var feeds = Self.initFeeds()
         if !Self.personalFeeds.isEmpty {
-            let insertionIndex = feeds.firstIndex { $0["name"] == "Αθλητικά" } ?? feeds.endIndex
-            feeds.insert(["name": Self.personalFeedsCategory, "url": "CategoryFeed"], at: insertionIndex)
+            feeds.append(["name": Self.personalFeedsCategory, "url": "CategoryFeed"])
         }
         return feeds
     }
@@ -28,7 +27,9 @@ class ConfigurationManager: NSObject {
         guard feed["url"] == "CategoryFeed" else { return name }
         switch name {
         case "Ειδήσεις": return String(localized: "News")
+        case "Οικονομία": return String(localized: "Finance")
         case "Υγεία & Ευεξία": return String(localized: "Health & Wellness")
+        case "Γυναίκα": return String(localized: "Woman")
         case "Τεχνολογία": return String(localized: "Technology")
         case "Αθλητικά": return String(localized: "Sports")
         case personalFeedsCategory: return String(localized: "My feeds")

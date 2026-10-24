@@ -21,7 +21,7 @@ RSS Greece was added to AdMob as an unpublished app because App Store lookup for
 
 ## Privacy-policy website
 
-The Greek/English policy is published at **https://rss-greece-privacy.web.app/privacy**, with **philipsoft@icloud.com** as the support/privacy contact. Firebase project **RSS Greece** (`rss-greece-privacy`) contains the registered web app **RSS Greece Privacy**. The static page uses Firebase Hosting, without Firebase client SDKs or website analytics. Source is in `web/privacy.html`; `.firebaserc` selects the project and `firebase.json` configures Hosting. The root URL redirects to `/privacy`.
+The Greek/English policy is published at **https://rss-greece-privacy.web.app/privacy**, with **philipsoft@icloud.com** as the support/privacy contact. Firebase project **RSS Greece** (`rss-greece-privacy`) contains the registered web app **RSS Greece Privacy**. The static page uses Firebase Hosting, without Firebase client SDKs or website analytics. Source is in `web/privacy.html`; `.firebaserc` selects the project and `firebase.json` configures Hosting. The root URL serves the Greek app website; `/en` serves its English version. Source is in `web/index.html`, `web/en.html`, and `web/site.css`. The Greek/English copyright page is at **https://rss-greece-privacy.web.app/copyright**, with source in `web/copyright.html`.
 
 To update the public page after editing its source:
 
@@ -92,3 +92,7 @@ Every fifth accepted **Continue reading** tap is eligible for an interstitial. T
 The next excerpt appearance loads the next single-use ad. Implementation follows [Google's iOS interstitial guide](https://developers.google.com/admob/ios/interstitial). A new production unit may take up to an hour to begin serving, and the app's existing AdMob readiness requirements still apply.
 
 Banner visibility is controlled globally by the Boolean **BannerAdsEnabled** in `RssReader/Info.plist` (currently `false`; a missing key also disables banners). Setting it to `true` restores the placements enabled by `HomeScreenAdsEnabled` and `DetailViewAdsEnabled` in `ReaderConf.plist`. Disabled banners make no ad requests and reserve no banner space. This switch does not disable Continue reading interstitials or their consent/privacy-options flow.
+
+## App Store metadata
+
+Plain English and Greek App Store copy is stored in `metadata/app-info` and `metadata/version/1.7`. It includes subtitles, descriptions, keywords, and support/privacy URLs. The metadata was validated and uploaded to RSS Greece version 1.7 with `asc metadata`; a follow-up dry run confirmed no differences from App Store Connect.

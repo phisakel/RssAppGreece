@@ -26,6 +26,8 @@ class SlideUpTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning
         
         // Set up the transform we'll use in the animation
         let container = transitionContext.containerView
+        // The destination can have a different size after a Duo display change.
+        toView.frame = transitionContext.finalFrame(for: toVC)
         let offScreenDown = CGAffineTransform(translationX: 0, y: container.frame.height)
         
         let shiftDown = CGAffineTransform(translationX: 0, y: 15)
