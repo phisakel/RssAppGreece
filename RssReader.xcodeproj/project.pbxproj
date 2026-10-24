@@ -12,7 +12,9 @@
 		501415A35FED9B68C297725A /* FeedHTML in Frameworks */ = {isa = PBXBuildFile; productRef = 7C1380E05B630DF9E036A1B1 /* FeedHTML */; };
 		529C23F5E78CFFB0EE27F533 /* FeedsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529C25CF9189D4D59280A0B5 /* FeedsService.swift */; };
 		AAEFF8F1DCD70D110C069DF8 /* StoredArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C530040F490BF74FB7BB65 /* StoredArticle.swift */; };
+		B0186290308D47EC00706E78 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E6FF664D17048C4A546022F /* Main_iPad.storyboard */; };
 		CAFB5C9A865A7D4CFB753927 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2AC42F49DF642227DC3F77 /* SceneDelegate.swift */; };
+		CFB40C8C480040FB9D00E3FC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C87C4B614094E948F2E8B63 /* Localizable.strings */; };
 		D820E8A0EA9F40C827B6A921 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 8D324AE87AEE536E0DCE4120 /* SDWebImage */; };
 		E12A8D14AC9CAC4A8E466F2C /* ArticleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023509ED40AECA1A64EC5FEF /* ArticleStore.swift */; };
 		E8DC69F73F85C5177997B278 /* SWRevealViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 444E53B65D1640571D7B743F /* SWRevealViewController */; };
@@ -61,6 +63,7 @@
 		F4E173D51AF759EB00E9B99E /* SlideUpTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E173D41AF759EB00E9B99E /* SlideUpTransitionAnimator.swift */; };
 		F4E173DA1AF89FB800E9B99E /* SafariActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E173D91AF89FB800E9B99E /* SafariActivity.swift */; };
 		FBCE1101297F45DAA919D0F7 /* FeedSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B351A3BDCEC44F8849EA59D /* FeedSubscription.swift */; };
+		B34BC062B2434DAC9B2A775B /* ContinueReadingInterstitial.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F200AAAF394147B31504A3 /* ContinueReadingInterstitial.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,11 +78,22 @@
 
 /* Begin PBXFileReference section */
 		023509ED40AECA1A64EC5FEF /* ArticleStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ArticleStore.swift; path = RssReader/Classes/SharedInstances/ArticleStore.swift; sourceTree = "<group>"; };
+		0870BF8FA6AB4990B0BE0DEE /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0B351A3BDCEC44F8849EA59D /* FeedSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedSubscription.swift; path = RssReader/Classes/Models/FeedSubscription.swift; sourceTree = "<group>"; };
+		131B3ADBD7424A189CFBDEE2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2DEAE40C0CE04A0FA4F56480 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main_iPhone.strings; sourceTree = "<group>"; };
 		529C25CF9189D4D59280A0B5 /* FeedsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsService.swift; sourceTree = "<group>"; };
+		586B6E81204D4BCCB2D7E990 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = "el.lproj/Main_iPhone-3.strings"; sourceTree = "<group>"; };
+		5BAC4C693A70487EA3E64606 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/Main_iPhone-2.strings"; sourceTree = "<group>"; };
+		5E6FF664D17048C4A546022F /* Main_iPad.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main_iPad.storyboard; sourceTree = "<group>"; };
+		69D9F321204746A99FB20737 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = "el.lproj/Main_iPhone-2.strings"; sourceTree = "<group>"; };
 		730F539754DB46828C6C92E0 /* FeedToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedToolbar.swift; path = RssReader/Classes/Views/FeedToolbar.swift; sourceTree = "<group>"; };
 		7E2AC42F49DF642227DC3F77 /* SceneDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = RssReader/SceneDelegate.swift; sourceTree = "<group>"; };
 		80C530040F490BF74FB7BB65 /* StoredArticle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoredArticle.swift; path = RssReader/Classes/Models/StoredArticle.swift; sourceTree = "<group>"; };
+		839E31B6E2034447AB316911 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "en.lproj/Main_iPhone-3.strings"; sourceTree = "<group>"; };
+		B03C090BF06F49D3BDFE2077 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Main_iPad.strings; sourceTree = "<group>"; };
+		DD514D85C150484DB346D1B1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main_iPad.strings; sourceTree = "<group>"; };
+		E1B278ACC15F4793A1D1D394 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Main_iPhone.strings; sourceTree = "<group>"; };
 		F219FD0E1A21D2680028EF72 /* DropdownMenuItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropdownMenuItem.swift; path = ../DropdownMenuItem.swift; sourceTree = "<group>"; };
 		F25377191A1E149D008B1171 /* RssReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RssReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F253771D1A1E149D008B1171 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,7 +106,6 @@
 		F25377341A1E149D008B1171 /* RssReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RssReaderTests.swift; sourceTree = "<group>"; };
 		F253774E1A1E444A008B1171 /* FeedsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsViewController.swift; sourceTree = "<group>"; };
 		F26505BF1A2331D200A066A5 /* SideMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
-		F26505C11A2351B000A066A5 /* Main_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main_iPad.storyboard; sourceTree = "<group>"; };
 		F27C5E651A1E669F00E0073A /* ArticleViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArticleViewCell.swift; sourceTree = "<group>"; };
 		F27C5E6A1A1E917000E0073A /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		F27C5E6E1A1E9F6C00E0073A /* RssReader-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RssReader-Bridging-Header.h"; path = "SupportingFiles/RssReader-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -129,6 +142,7 @@
 		F4E173CF1AF5CE2100E9B99E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Base.lproj/Main_iPhone-2.storyboard"; sourceTree = "<group>"; };
 		F4E173D41AF759EB00E9B99E /* SlideUpTransitionAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideUpTransitionAnimator.swift; sourceTree = "<group>"; };
 		F4E173D91AF89FB800E9B99E /* SafariActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafariActivity.swift; sourceTree = "<group>"; };
+		B0F200AAAF394147B31504A3 /* ContinueReadingInterstitial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueReadingInterstitial.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +189,7 @@
 		529C2EBF95D90AB267A45EB7 /* Feed Service & Parser */ = {
 			isa = PBXGroup;
 			children = (
+				B0F200AAAF394147B31504A3 /* ContinueReadingInterstitial.swift */,
 				529C25CF9189D4D59280A0B5 /* FeedsService.swift */,
 			);
 			name = "Feed Service & Parser";
@@ -211,6 +226,7 @@
 				F4829C391BE314C6007570D0 /* Storyboard */,
 				F25377411A1E432E008B1171 /* Classes */,
 				F253771E1A1E149D008B1171 /* AppDelegate.swift */,
+				8C87C4B614094E948F2E8B63 /* Localizable.strings */,
 				F25377251A1E149D008B1171 /* Images.xcassets */,
 				F25377271A1E149D008B1171 /* LaunchScreen.xib */,
 				F253771C1A1E149D008B1171 /* Supporting Files */,
@@ -410,6 +426,7 @@
 		F4829C3E1BE3153E007570D0 /* Storyboard-iPad */ = {
 			isa = PBXGroup;
 			children = (
+				5E6FF664D17048C4A546022F /* Main_iPad.storyboard */,
 				F26505C11A2351B000A066A5 /* Main_iPad.storyboard */,
 			);
 			name = "Storyboard-iPad";
@@ -524,6 +541,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				el,
 				Base,
 			);
 			mainGroup = F25377101A1E149D008B1171;
@@ -552,10 +570,12 @@
 				F25377291A1E149D008B1171 /* LaunchScreen.xib in Resources */,
 				F4B820771A301F2900A1E002 /* OFL.txt in Resources */,
 				F4E173D01AF5CE2100E9B99E /* Main_iPhone-2.storyboard in Resources */,
+				CFB40C8C480040FB9D00E3FC /* Localizable.strings in Resources */,
 				F25377261A1E149D008B1171 /* Images.xcassets in Resources */,
 				F43DFE281B20303D008C7792 /* Main_iPhone-3.storyboard in Resources */,
 				F4829C341BE209F9007570D0 /* SectionHeaderView.xib in Resources */,
 				F4B820A81A314D5C00A1E002 /* ReaderConf.plist in Resources */,
+				B0186290308D47EC00706E78 /* Main_iPad.storyboard in Resources */,
 				F26505C21A2351B000A066A5 /* Main_iPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -602,6 +622,7 @@
 				F43DFE431B217EFA008C7792 /* ArticleMetaViewCell.swift in Sources */,
 				F4829C361BE210FE007570D0 /* SectionHeaderView.swift in Sources */,
 				F293593E1A25343B00BD0058 /* ArticleDataSource.swift in Sources */,
+				B34BC062B2434DAC9B2A775B /* ContinueReadingInterstitial.swift in Sources */,
 				529C23F5E78CFFB0EE27F533 /* FeedsService.swift in Sources */,
 				F4B0EF401B33AEB90007AA5A /* CacheManager.swift in Sources */,
 				F26505C01A2331D200A066A5 /* SideMenuViewController.swift in Sources */,
@@ -634,10 +655,21 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		8C87C4B614094E948F2E8B63 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				131B3ADBD7424A189CFBDEE2 /* en */,
+				0870BF8FA6AB4990B0BE0DEE /* el */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		F25377221A1E149D008B1171 /* Main_iPhone.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F25377231A1E149D008B1171 /* Base */,
+				2DEAE40C0CE04A0FA4F56480 /* en */,
+				E1B278ACC15F4793A1D1D394 /* el */,
 			);
 			name = Main_iPhone.storyboard;
 			sourceTree = "<group>";
@@ -650,10 +682,21 @@
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
+		F26505C11A2351B000A066A5 /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD514D85C150484DB346D1B1 /* en */,
+				B03C090BF06F49D3BDFE2077 /* el */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
 		F43DFE261B20303D008C7792 /* Main_iPhone-3.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F43DFE271B20303D008C7792 /* Base */,
+				839E31B6E2034447AB316911 /* en */,
+				586B6E81204D4BCCB2D7E990 /* el */,
 			);
 			name = "Main_iPhone-3.storyboard";
 			sourceTree = "<group>";
@@ -662,6 +705,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				F4E173CF1AF5CE2100E9B99E /* Base */,
+				5BAC4C693A70487EA3E64606 /* en */,
+				69D9F321204746A99FB20737 /* el */,
 			);
 			name = "Main_iPhone-2.storyboard";
 			sourceTree = "<group>";
@@ -778,69 +823,69 @@
 			name = Release;
 		};
 		F25377391A1E149D008B1171 /* Debug */ = {
-	buildSettings = {
-		"ASSETCATALOG_COMPILER_APPICON_NAME" = AppIcon;
-		"CLANG_ENABLE_MODULES" = YES;
-		"CODE_SIGN_IDENTITY" = "Apple Development";
-		"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
-		"CODE_SIGN_STYLE" = Automatic;
-		"CURRENT_PROJECT_VERSION" = 2;
-		"DEVELOPMENT_TEAM" = 5T7UHW36CL;
-		"ENABLE_BITCODE" = NO;
-		"INFOPLIST_FILE" = "RssReader/Info.plist";
-		"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
-		"LD_RUNPATH_SEARCH_PATHS" = (
-			"$(inherited)",
-			"@executable_path/Frameworks",
-		);
-		"MARKETING_VERSION" = "1.7";
-		"OTHER_LDFLAGS" = (
-			"$(inherited)",
-			"-ObjC",
-		);
-		"PRODUCT_BUNDLE_IDENTIFIER" = "gr.phisakel.RssAppGreece";
-		"PRODUCT_NAME" = "$(TARGET_NAME)";
-		"PROVISIONING_PROFILE" = "";
-		"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
-		"SWIFT_OBJC_BRIDGING_HEADER" = "RssReader/SupportingFiles/RssReader-Bridging-Header.h";
-		"SWIFT_VERSION" = "5.0";
-		"TARGETED_DEVICE_FAMILY" = "1,2";
-	};
-	isa = XCBuildConfiguration;
-	name = Debug;
-};
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 5T7UHW36CL;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = RssReader/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.7;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = gr.phisakel.RssAppGreece;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_OBJC_BRIDGING_HEADER = "RssReader/SupportingFiles/RssReader-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		F253773A1A1E149D008B1171 /* Release */ = {
-	buildSettings = {
-		"ASSETCATALOG_COMPILER_APPICON_NAME" = AppIcon;
-		"CLANG_ENABLE_MODULES" = YES;
-		"CODE_SIGN_IDENTITY" = "Apple Development";
-		"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
-		"CODE_SIGN_STYLE" = Automatic;
-		"CURRENT_PROJECT_VERSION" = 2;
-		"DEVELOPMENT_TEAM" = 5T7UHW36CL;
-		"ENABLE_BITCODE" = NO;
-		"INFOPLIST_FILE" = "RssReader/Info.plist";
-		"IPHONEOS_DEPLOYMENT_TARGET" = "18.0";
-		"LD_RUNPATH_SEARCH_PATHS" = (
-			"$(inherited)",
-			"@executable_path/Frameworks",
-		);
-		"MARKETING_VERSION" = "1.7";
-		"OTHER_LDFLAGS" = (
-			"$(inherited)",
-			"-ObjC",
-		);
-		"PRODUCT_BUNDLE_IDENTIFIER" = "gr.phisakel.RssAppGreece";
-		"PRODUCT_NAME" = "$(TARGET_NAME)";
-		"PROVISIONING_PROFILE" = "";
-		"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
-		"SWIFT_OBJC_BRIDGING_HEADER" = "RssReader/SupportingFiles/RssReader-Bridging-Header.h";
-		"SWIFT_VERSION" = "5.0";
-		"TARGETED_DEVICE_FAMILY" = "1,2";
-	};
-	isa = XCBuildConfiguration;
-	name = Release;
-};
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 5T7UHW36CL;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = RssReader/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.7;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = gr.phisakel.RssAppGreece;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_OBJC_BRIDGING_HEADER = "RssReader/SupportingFiles/RssReader-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		F253773C1A1E149D008B1171 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {

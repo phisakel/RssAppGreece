@@ -22,6 +22,20 @@ class ConfigurationManager: NSObject {
         return feeds
     }
 
+    /// Translate category headings without changing feed names or lookup keys.
+    static func displayName(for feed: [String: String]) -> String {
+        let name = feed["name"] ?? ""
+        guard feed["url"] == "CategoryFeed" else { return name }
+        switch name {
+        case "Ειδήσεις": return String(localized: "News")
+        case "Υγεία & Ευεξία": return String(localized: "Health & Wellness")
+        case "Τεχνολογία": return String(localized: "Technology")
+        case "Αθλητικά": return String(localized: "Sports")
+        case personalFeedsCategory: return String(localized: "My feeds")
+        default: return name
+        }
+    }
+
     private static var personalFeeds: [[String: String]] {
         guard let store = try? ArticleStore.shared.get(), let subscriptions = try? store.subscriptions() else { return [] }
         return subscriptions.map { ["name": $0.name, "url": $0.url] }
@@ -64,12 +78,16 @@ class ConfigurationManager: NSObject {
         return categoryFeeds
     }
     
+    class func isBannerAdsEnabled() -> Bool {
+        Bundle.main.object(forInfoDictionaryKey: "BannerAdsEnabled") as? Bool ?? false
+    }
+
     class func isDetailViewAdsEnabled() -> Bool {
-        return ConfigurationManager.sharedConfigurationManager().configuration?.object(forKey: "DetailViewAdsEnabled") as! Bool
+        isBannerAdsEnabled() && (sharedConfigurationManager().configuration?.object(forKey: "DetailViewAdsEnabled") as? Bool ?? false)
     }
 
     class func isHomeScreenAdsEnabled() -> Bool {
-        return ConfigurationManager.sharedConfigurationManager().configuration?.object(forKey: "HomeScreenAdsEnabled") as! Bool
+        return isBannerAdsEnabled() && (sharedConfigurationManager().configuration?.object(forKey: "HomeScreenAdsEnabled") as? Bool ?? false)
     }
 
     class func isDropdownMenuEnabled() -> Bool {
@@ -89,6 +107,18 @@ class ConfigurationManager: NSObject {
         return "Dark"
     }
     
+    class func isInterstitialAdsEnabled() -> Bool {
+        sharedConfigurationManager().configuration?.object(forKey: "InterstitialAdsEnabled") as? Bool ?? false
+    }
+
+    class func admobInterstitialAdUnitId() -> String {
+        #if DEBUG
+        return "ca-app-pub-3940256099942544/4411468910"
+        #else
+        return sharedConfigurationManager().configuration?.object(forKey: "AdmobInterstitialAdUnitId") as? String ?? ""
+        #endif
+    }
+
     class func admobAppId() -> String {
         return Bundle.main.object(forInfoDictionaryKey: "GADApplicationIdentifier") as? String ?? ""
     }

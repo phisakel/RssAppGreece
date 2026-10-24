@@ -6,12 +6,30 @@
 //  Copyright (c) 2015 AppCoda Limited. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 enum FlatColor: Int {
 
     case lightGreen, darkGreen, lightBlue, darkBlue, lightPurple, darkPurple, lightOrange, darkOrange, paleOrange, lightRed, darkRed, brightYellow, paleYellow, silver
     
+    @MainActor
+    static func feedMenuBackgroundColor() -> UIColor {
+        let darkTheme = ConfigurationManager.defaultTheme().lowercased() == "dark"
+        return UIColor { traits in
+            if traits.userInterfaceStyle == .dark { return .systemGroupedBackground }
+            return darkTheme ? FlatColor.darkOrange.color() : FlatColor.brightYellow.color()
+        }
+    }
+
+    @MainActor
+    static func feedMenuRowBackgroundColor() -> UIColor {
+        let darkTheme = ConfigurationManager.defaultTheme().lowercased() == "dark"
+        return UIColor { traits in
+            if traits.userInterfaceStyle == .dark { return .secondarySystemGroupedBackground }
+            return darkTheme ? FlatColor.paleOrange.color() : FlatColor.paleYellow.color()
+        }
+    }
+
     func color() -> UIColor {
         switch(self) {
         case .lightGreen: return UIColor(red: 41.0/255.0, green: 128.0/255.0, blue: 185.0/255.0, alpha: 1.0)

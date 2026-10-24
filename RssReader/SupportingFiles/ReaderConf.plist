@@ -12,6 +12,10 @@
 	<true/>
 	<key>AdmobAdUnitId</key>
 	<string>ca-app-pub-6881531620633926/9627200190</string>
+	<key>InterstitialAdsEnabled</key>
+	<true/>
+	<key>AdmobInterstitialAdUnitId</key>
+	<string>ca-app-pub-6881531620633926/4295495815</string>
 	<key>DisplayMode</key>
 	<string>Image</string>
 	<key>Feeds</key>

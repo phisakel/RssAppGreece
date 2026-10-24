@@ -16,7 +16,7 @@ class SafariActivity: UIActivity {
 //    }
     
     override var activityTitle : String? {
-        return "Open in Safari"
+        return String(localized: "Open in Safari")
     }
     
     override var activityImage : UIImage? {

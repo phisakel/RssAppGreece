@@ -83,19 +83,20 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfl-qW-6Xw">
-                                                    <rect key="frame" x="20" y="193" width="135" height="27"/>
+                                                    <rect key="frame" x="20" y="193" width="180" height="44"/>
                                                     <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="27" id="tod-TK-BJi"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="tod-TK-BJi"/>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="135" id="zUq-te-fya"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                                                    <state key="normal" title="CONTINUE READING">
+                                                    <inset key="contentEdgeInsets" minX="16" minY="12" maxX="16" maxY="12"/>
+                                                    <state key="normal" title="Continue reading">
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <segue destination="bh4-ag-Yj5" kind="presentation" identifier="showArticle" id="cxF-UA-mdc"/>
+                                                        <action selector="continueReadingTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RdA-ds-Tap"/>
                                                     </connections>
                                                 </button>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pj2-zL-TFU">
@@ -135,16 +136,17 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3d8-Is-8nv">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="64"/>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="90"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hkp-vy-fQj">
-                                        <rect key="frame" x="344" y="34" width="44" height="44"/>
-                                        <color key="backgroundColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <rect key="frame" x="344" y="46" width="44" height="44"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="ayH-fL-v76"/>
                                             <constraint firstAttribute="width" constant="44" id="kAN-8D-Rk1"/>
                                         </constraints>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <accessibility key="accessibilityConfiguration" label="Close"/>
                                         <state key="normal" image="cancel">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -158,13 +160,14 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r1y-Jr-hWo">
-                                        <rect key="frame" x="298" y="34" width="44" height="44"/>
-                                        <color key="backgroundColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <rect key="frame" x="298" y="46" width="44" height="44"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="WRP-FX-pyg"/>
                                             <constraint firstAttribute="width" constant="44" id="qT0-Wd-2Hg"/>
                                         </constraints>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <accessibility key="accessibilityConfiguration" label="Share"/>
                                         <state key="normal" image="share">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -180,8 +183,8 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="Hkp-vy-fQj" firstAttribute="top" secondItem="r1y-Jr-hWo" secondAttribute="top" id="6sb-Oh-TTp"/>
-                                    <constraint firstAttribute="height" constant="78" id="9Ro-ju-hER"/>
-                                    <constraint firstItem="Hkp-vy-fQj" firstAttribute="top" secondItem="3d8-Is-8nv" secondAttribute="top" constant="34" id="BV6-ju-zjM"/>
+                                    <constraint firstAttribute="height" constant="90" id="9Ro-ju-hER"/>
+                                    <constraint firstItem="Hkp-vy-fQj" firstAttribute="top" secondItem="3d8-Is-8nv" secondAttribute="top" constant="46" id="BV6-ju-zjM"/>
                                     <constraint firstAttribute="trailing" secondItem="Hkp-vy-fQj" secondAttribute="trailing" constant="8" id="Xmt-5J-svl"/>
                                     <constraint firstItem="Hkp-vy-fQj" firstAttribute="leading" secondItem="r1y-Jr-hWo" secondAttribute="trailing" constant="8" id="it4-On-1oJ"/>
                                 </constraints>
@@ -210,6 +213,7 @@
                     <connections>
                         <outlet property="headerView" destination="kjn-Nb-oep" id="qxn-tm-hrE"/>
                         <outlet property="tableView" destination="sAd-ND-jrN" id="1H1-nu-dYv"/>
+                        <segue destination="bh4-ag-Yj5" kind="presentation" identifier="showArticle" id="cxF-UA-mdc"/>
                         <segue destination="bh4-ag-Yj5" kind="presentation" identifier="showLink" id="bFg-WE-VmP"/>
                     </connections>
                 </viewController>
@@ -275,6 +279,7 @@
                                             <constraint firstAttribute="height" constant="30" id="ccH-Ev-oMt"/>
                                             <constraint firstAttribute="width" constant="30" id="lyP-8k-X4j"/>
                                         </constraints>
+                                        <accessibility key="accessibilityConfiguration" label="Close"/>
                                         <state key="normal" image="cancel">
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -416,7 +421,7 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AUTHOR" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UiC-i2-bhf">
                                                     <rect key="frame" x="155" y="46" width="41.666666666666657" height="12"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -457,7 +462,7 @@
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AUTHOR" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pii-oQ-us6">
                                                     <rect key="frame" x="27.999999999999996" y="92.333333333333329" width="41.666666666666657" height="12"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" systemColor="systemBlueColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -501,6 +506,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="1bl-m1-xUu"/>
                                         </constraints>
+                                        <accessibility key="accessibilityConfiguration" label="Feeds"/>
                                         <state key="normal" image="hamburger_icon">
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -611,14 +617,15 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RT4-2p-x3t">
-                                <rect key="frame" x="344" y="38" width="44" height="44"/>
-                                <color key="backgroundColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="344" y="50" width="44" height="44"/>
+                                <color key="backgroundColor" systemColor="systemGrayColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="g4y-sM-HVs"/>
                                     <constraint firstAttribute="height" constant="44" id="r53-Ng-neR"/>
                                 </constraints>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="cancel">
+                                <accessibility key="accessibilityConfiguration" label="Close"/>
+                                        <state key="normal" image="cancel">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -631,14 +638,15 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8EA-oV-sIM">
-                                <rect key="frame" x="298" y="38" width="44" height="44"/>
-                                <color key="backgroundColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="298" y="50" width="44" height="44"/>
+                                <color key="backgroundColor" systemColor="systemGrayColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="jp8-50-8XM"/>
                                     <constraint firstAttribute="height" constant="44" id="nyY-SF-dEL"/>
                                 </constraints>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="share">
+                                <accessibility key="accessibilityConfiguration" label="Share"/>
+                                        <state key="normal" image="share">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -659,7 +667,7 @@
                             <constraint firstAttribute="centerY" secondItem="2fr-aH-HgT" secondAttribute="centerY" id="Ws6-nu-lCQ"/>
                             <constraint firstItem="YBk-aQ-MAd" firstAttribute="centerX" secondItem="2fr-aH-HgT" secondAttribute="centerX" id="Zyi-Of-mq7"/>
                             <constraint firstItem="qim-gz-c9o" firstAttribute="trailing" secondItem="YBk-aQ-MAd" secondAttribute="trailing" id="c6y-Uw-asQ"/>
-                            <constraint firstItem="qim-gz-c9o" firstAttribute="top" secondItem="RT4-2p-x3t" secondAttribute="bottom" constant="-76" id="dFx-Rb-XO3"/>
+                            <constraint firstItem="qim-gz-c9o" firstAttribute="top" secondItem="RT4-2p-x3t" secondAttribute="bottom" constant="-88" id="dFx-Rb-XO3"/>
                             <constraint firstItem="RT4-2p-x3t" firstAttribute="leading" secondItem="qim-gz-c9o" secondAttribute="trailing" constant="-46" id="fCC-Ki-vnj"/>
                             <constraint firstItem="RT4-2p-x3t" firstAttribute="centerY" secondItem="8EA-oV-sIM" secondAttribute="centerY" id="jZs-EU-NWX"/>
                             <constraint firstItem="qim-gz-c9o" firstAttribute="leading" secondItem="YBk-aQ-MAd" secondAttribute="leading" id="oWc-of-7Cy"/>
@@ -710,6 +718,9 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.5764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

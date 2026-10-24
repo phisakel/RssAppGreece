@@ -11,7 +11,7 @@ Requires Xcode 16 or newer and iOS 18.0 or newer. Open `RssReader.xcodeproj` (th
 
 ## Google Mobile Ads
 
-The AdMob app is **RSS Greece** (iOS). `Info.plist` contains app ID `ca-app-pub-6881531620633926~8724559947` and Google's SKAdNetwork buyer identifiers. `ReaderConf.plist` enables home and article banners and contains production banner unit `ca-app-pub-6881531620633926/9627200190` (**RSS Greece Adaptive Banner**). Debug builds always substitute Google's test banner unit, including on physical devices; Release builds use the configured production unit.
+The AdMob app is **RSS Greece** (iOS). `Info.plist` contains app ID `ca-app-pub-6881531620633926~8724559947` and Google's SKAdNetwork buyer identifiers. `Info.plist` disables all banners with `BannerAdsEnabled = false`. Set it to `true` to allow the home and article banner switches in `ReaderConf.plist`, which contains production banner unit `ca-app-pub-6881531620633926/9627200190` (**RSS Greece Adaptive Banner**). Debug builds always substitute Google's test banner unit, including on physical devices; Release builds use the configured production unit.
 
 `AdMobManager` gathers UMP consent once per app launch from a visible screen, waits for permission to request ads, then initializes the SDK once. Consent errors leave the reader usable; ads remain blocked unless UMP permits requests using existing consent. The **RSS Greece — European consent** message is published in **AdMob → Privacy & messaging** for RSS Greece only, with Greek as the default, English as an additional language, an explicit rejection option in all consent regions, and EEA/UK/Switzerland targeting. Its privacy-policy URL is [rss-greece-privacy.web.app/privacy](https://rss-greece-privacy.web.app/privacy). AdMob notes that message publication can take up to an hour to propagate. Google's [UMP guide](https://developers.google.com/admob/ios/privacy) describes the account and consent setup.
 
@@ -76,3 +76,19 @@ asc workflow run publish-appstore-connect ARCHIVE_PATH:.asc/artifacts/RssReader-
 ```
 
 A failed run with completed checkpoints can be resumed using its run ID. This workflow uploads and stages the build in App Store Connect; review submission is a separate step after completing store metadata, privacy details, and screenshots.
+
+## Interface languages
+
+The app supports English (`en`) and Greek (`el`), selected by iOS from the user's preferred languages or the app's language setting in Settings. English is the fallback. `RssReader/en.lproj` and `RssReader/el.lproj` contain `Localizable.strings` for Swift/UIKit/SwiftUI text and storyboard `.strings` for static controls, including **Continue reading / Συνεχίστε την ανάγνωση**. Add translations to both languages when adding interface text.
+
+App-owned category headings are translated at display time; their configuration keys stay unchanged. Publisher names, user-created feed names, and article content remain in their source language. The RSS Greece brand name is the same in both languages. System and Google consent dialogs use the localization provided by their frameworks.
+
+## Continue reading interstitial
+
+AdMob unit **RSS Greece Continue Reading Interstitial** (`ca-app-pub-6881531620633926/4295495815`) is configured under `AdmobInterstitialAdUnitId` in `ReaderConf.plist`. `InterstitialAdsEnabled` controls this placement independently of banners. Debug builds use Google's iOS interstitial test unit (`ca-app-pub-3940256099942544/4411468910`); Release builds use the configured production unit.
+
+Every fifth accepted **Continue reading** tap is eligible for an interstitial. The counter is shared across articles and stored in `UserDefaults`, so closing an article or restarting the app does not reset it. Ads preload after the existing UMP consent and SDK initialization flow; cached ads are discarded before expiry and whenever privacy options reopen. A ready ad presents before the article and navigation resumes once on dismissal or presentation failure. When consent is unavailable, the ad is not loaded, or presentation is unsafe, the article opens immediately; skipped ads are not deferred to another tap. Rapid repeated taps while an ad is onscreen are ignored.
+
+The next excerpt appearance loads the next single-use ad. Implementation follows [Google's iOS interstitial guide](https://developers.google.com/admob/ios/interstitial). A new production unit may take up to an hour to begin serving, and the app's existing AdMob readiness requirements still apply.
+
+Banner visibility is controlled globally by the Boolean **BannerAdsEnabled** in `RssReader/Info.plist` (currently `false`; a missing key also disables banners). Setting it to `true` restores the placements enabled by `HomeScreenAdsEnabled` and `DetailViewAdsEnabled` in `ReaderConf.plist`. Disabled banners make no ad requests and reserve no banner space. This switch does not disable Continue reading interstitials or their consent/privacy-options flow.

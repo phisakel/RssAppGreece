@@ -34,11 +34,14 @@ struct AddFeedSheet: View {
     @State private var errorMessage: String?
     let onAdded: (ValidatedFeed) -> Void
 
+    private var backgroundColor: Color { Color(uiColor: FlatColor.feedMenuBackgroundColor()) }
+    private var rowBackgroundColor: Color { Color(uiColor: FlatColor.feedMenuRowBackgroundColor()) }
+
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("https://example.com/feed", text: $url)
+                    TextField("RSS or Atom feed URL", text: $url)
                         .keyboardType(.URL)
                         .textContentType(.URL)
                         .textInputAutocapitalization(.never)
@@ -46,24 +49,28 @@ struct AddFeedSheet: View {
                         .accessibilityLabel("RSS Feed URL")
                         .accessibilityIdentifier("rssFeedURL")
                         .disabled(isSaving)
+                        .listRowBackground(rowBackgroundColor)
                     TextField("Name (optional)", text: $name)
                         .accessibilityIdentifier("rssFeedName")
                         .disabled(isSaving)
+                        .listRowBackground(rowBackgroundColor)
                 } header: {
                     Text("RSS Feed")
                 } footer: {
-                    Text("Paste an RSS or Atom feed URL. Leave the name empty to use the feed’s title. Saved feeds appear in Οι ροές μου.")
+                    Text("Paste an RSS or Atom feed URL. Leave the name empty to use the feed’s title. Saved feeds appear in My feeds.")
                 }
                 if isSaving {
                     HStack { ProgressView(); Text("Checking feed…") }
+                        .listRowBackground(rowBackgroundColor)
                 }
                 if let errorMessage {
                     Text(errorMessage).foregroundStyle(.red).accessibilityIdentifier("rssFeedError")
+                        .listRowBackground(rowBackgroundColor)
                 }
             }
             .scrollContentBackground(.hidden)
-            .background(Color(uiColor: .systemGroupedBackground))
-            .toolbarBackground(Color(uiColor: .systemGroupedBackground), for: .navigationBar)
+            .background(backgroundColor)
+            .toolbarBackground(backgroundColor, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .navigationTitle("Add RSS Feed")
             .navigationBarTitleDisplayMode(.inline)
@@ -78,7 +85,7 @@ struct AddFeedSheet: View {
                 }
             }
         }
-        .presentationBackground(Color(uiColor: .systemGroupedBackground))
+        .presentationBackground(backgroundColor)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .interactiveDismissDisabled(isSaving)
@@ -110,7 +117,7 @@ extension UIViewController {
             self?.dismiss(animated: true) { onAdded(feed) }
         })
         host.modalPresentationStyle = .pageSheet
-        host.view.backgroundColor = .systemGroupedBackground
+        host.view.backgroundColor = FlatColor.feedMenuBackgroundColor()
         host.sheetPresentationController?.detents = [.medium(), .large()]
         host.sheetPresentationController?.prefersGrabberVisible = true
         present(host, animated: true)

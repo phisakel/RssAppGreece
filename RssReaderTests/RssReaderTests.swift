@@ -7,6 +7,145 @@ import SwiftData
 final class RssReaderTests: XCTestCase {
     private let feedURL = "https://example.com/feed"
 
+    private func withContinueReadingDefaults(_ body: (UserDefaults) -> Void) {
+        let suite = "ContinueReadingTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        body(defaults)
+    }
+
+    func testContinueReadingFrequencySurvivesRecreationAndTriggersEveryFifthTap() {
+        withContinueReadingDefaults { defaults in
+            let first = ContinueReadingAdFrequency(defaults: defaults)
+            for _ in 1...3 { XCTAssertFalse(first.registerTap()) }
+            let recreated = ContinueReadingAdFrequency(defaults: defaults)
+            XCTAssertFalse(recreated.registerTap())
+            XCTAssertTrue(recreated.registerTap())
+            for _ in 1...4 { XCTAssertFalse(recreated.registerTap()) }
+            XCTAssertTrue(recreated.registerTap())
+        }
+    }
+
+    func testContinueReadingWaitsForAdOnlyOnFifthTapAndIgnoresRepeatedTaps() {
+        withContinueReadingDefaults { defaults in
+            let flow = ContinueReadingAdFlow(frequency: ContinueReadingAdFrequency(defaults: defaults))
+            var opened = 0
+            var presentations = 0
+            var dismissAd: (() -> Void)?
+            let presentAd: (@escaping () -> Void) -> Bool = { completion in
+                presentations += 1
+                dismissAd = completion
+                return true
+            }
+            for _ in 1...4 {
+                flow.continueReading(presentAd: presentAd) { opened += 1 }
+            }
+            XCTAssertEqual(opened, 4)
+            XCTAssertEqual(presentations, 0)
+            flow.continueReading(presentAd: presentAd) { opened += 1 }
+            XCTAssertEqual(presentations, 1)
+            XCTAssertEqual(opened, 4)
+            flow.continueReading(presentAd: presentAd) { opened += 1 }
+            XCTAssertEqual(presentations, 1)
+            dismissAd?()
+            dismissAd?()
+            XCTAssertEqual(opened, 5)
+            // The rapid duplicate tap was not counted toward the next ad.
+            for _ in 1...4 {
+                flow.continueReading(presentAd: presentAd) { opened += 1 }
+            }
+            XCTAssertEqual(presentations, 1)
+            XCTAssertEqual(opened, 9)
+        }
+    }
+
+    func testContinueReadingUnavailableAdOpensImmediatelyWithoutDeferringAd() {
+        withContinueReadingDefaults { defaults in
+            let flow = ContinueReadingAdFlow(frequency: ContinueReadingAdFrequency(defaults: defaults))
+            var opened = 0
+            var attempts = 0
+            for _ in 1...9 {
+                flow.continueReading(presentAd: { _ in attempts += 1; return false }) { opened += 1 }
+            }
+            XCTAssertEqual(opened, 9)
+            XCTAssertEqual(attempts, 1)
+            flow.continueReading(presentAd: { completion in
+                attempts += 1
+                // A presentation failure uses the same completion as dismissal.
+                completion()
+                return true
+            }) { opened += 1 }
+            XCTAssertEqual(attempts, 2)
+            XCTAssertEqual(opened, 10)
+        }
+    }
+
+    func testOldAdCallbackCannotFinishANewerReadingRequest() {
+        withContinueReadingDefaults { defaults in
+            let flow = ContinueReadingAdFlow(frequency: ContinueReadingAdFrequency(defaults: defaults))
+            var opened = 0
+            var completions: [() -> Void] = []
+            let presentAd: (@escaping () -> Void) -> Bool = { completions.append($0); return true }
+            for _ in 1...5 { flow.continueReading(presentAd: presentAd) { opened += 1 } }
+            completions[0]()
+            for _ in 1...5 { flow.continueReading(presentAd: presentAd) { opened += 1 } }
+            XCTAssertEqual(opened, 9)
+            completions[0]()
+            XCTAssertEqual(opened, 9)
+            completions[1]()
+            XCTAssertEqual(opened, 10)
+        }
+    }
+
+    func testInterstitialUsesGoogleTestUnitInDebugBuilds() {
+        #if DEBUG
+        XCTAssertEqual(ConfigurationManager.admobInterstitialAdUnitId(), "ca-app-pub-3940256099942544/4411468910")
+        #endif
+    }
+
+    func testEnglishAndGreekResourcesAreBundledAndComplete() throws {
+        let appBundle = Bundle(for: ConfigurationManager.self)
+        XCTAssertTrue(appBundle.localizations.contains("en"))
+        XCTAssertTrue(appBundle.localizations.contains("el"))
+        for table in ["Localizable", "Main_iPhone", "Main_iPhone-2", "Main_iPhone-3", "Main_iPad"] {
+            var tables: [[String: String]] = []
+            for language in ["en", "el"] {
+                let url = try XCTUnwrap(appBundle.url(forResource: table, withExtension: "strings", subdirectory: nil, localization: language))
+                let data = try Data(contentsOf: url)
+                let values = try XCTUnwrap(PropertyListSerialization.propertyList(from: data, format: nil) as? [String: String])
+                XCTAssertFalse(values.isEmpty, "Missing translations in \(language)/\(table)")
+                XCTAssertFalse(values.values.contains(where: { $0.isEmpty }))
+                tables.append(values)
+            }
+            XCTAssertEqual(Set(tables[0].keys), Set(tables[1].keys), "Translation coverage differs in \(table)")
+        }
+    }
+
+    func testLocalizedReadingButtonAndInterpolatedMessages() throws {
+        let appBundle = Bundle(for: ConfigurationManager.self)
+        let author = "Μαρία Smith"
+        let status = 404
+        for (language, reading, byline, http) in [
+            ("en", "Continue reading", "By Μαρία Smith", "The feed server returned HTTP 404. Please check the URL."),
+            ("el", "Συνεχίστε την ανάγνωση", "Από Μαρία Smith", "Ο διακομιστής της ροής επέστρεψε HTTP 404. Ελέγξτε τη διεύθυνση.")
+        ] {
+            let path = try XCTUnwrap(appBundle.path(forResource: language, ofType: "lproj"))
+            let bundle = try XCTUnwrap(Bundle(path: path))
+            XCTAssertEqual(bundle.localizedString(forKey: "cfl-qW-6Xw.normalTitle", value: nil, table: "Main_iPhone-3"), reading)
+            XCTAssertEqual(String(localized: "By \(author)", bundle: bundle), byline)
+            XCTAssertEqual(String(localized: "The feed server returned HTTP \(status). Please check the URL.", bundle: bundle), http)
+        }
+    }
+
+    func testLocalizedCategoriesPreserveFeedIdentityAndPublisherNames() {
+        let category = ["name": "Ειδήσεις", "url": "CategoryFeed"]
+        XCTAssertEqual(ConfigurationManager.displayName(for: category), String(localized: "News"))
+        XCTAssertNotNil(ConfigurationManager.getCategoryFeeds(category["name"]!))
+        let publisher = ["name": "Ειδήσεις", "url": "https://example.com/feed"]
+        XCTAssertEqual(ConfigurationManager.displayName(for: publisher), publisher["name"])
+        XCTAssertEqual(category["name"], "Ειδήσεις")
+    }
+
     func testSceneFeedRoundTripAndInvalidState() throws {
         let feed = SceneFeed(title: "Καθημερινή", url: "https://www.kathimerini.gr/infeeds/rss/nx-rss-feed.xml")
         XCTAssertEqual(SceneFeed.decode(feed.encoded), feed)

@@ -136,7 +136,7 @@ extension ArticleDetailViewController: UIScrollViewDelegate {
 
 extension ArticleDetailViewController: BannerViewDelegate {
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        guard AdMobManager.shared.canDisplayAds else { return }
+        guard ConfigurationManager.isDetailViewAdsEnabled(), AdMobManager.shared.canDisplayAds else { return }
         if bannerView.superview == nil {
             bannerView.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(bannerView)

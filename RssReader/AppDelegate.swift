@@ -97,7 +97,7 @@ final class AdMobManager {
         var requestedSize: CGSize?
         var isPreparing = false
 
-        init(banner: BannerView, controller: UIViewController, table: UITableView?) {
+        init(banner: BannerView? = nil, controller: UIViewController, table: UITableView?) {
             self.banner = banner
             self.controller = controller
             self.table = table
@@ -122,12 +122,36 @@ final class AdMobManager {
         placements.first { $0.banner === banner }?.requestedSize = nil
     }
 
+    /// Privacy options remain available for interstitial-only configurations.
+    func registerPrivacyOptions(from controller: UIViewController, table: UITableView) {
+        guard ConfigurationManager.isBannerAdsEnabled() || ConfigurationManager.isInterstitialAdsEnabled(),
+              controller.viewIfLoaded?.window != nil else { return }
+        placements.removeAll { $0.controller == nil }
+        let placement: Placement
+        if let existing = placements.first(where: { $0.controller === controller && $0.table === table }) {
+            placement = existing
+        } else {
+            placement = Placement(controller: controller, table: table)
+            placements.append(placement)
+        }
+        Task { [weak self, weak controller] in
+            guard let self, let controller else { return }
+            await prepare(from: controller)
+            updatePrivacyButton(for: placement)
+        }
+    }
+
     func load(_ banner: BannerView, from controller: UIViewController, table: UITableView? = nil) {
-        guard controller.viewIfLoaded?.window != nil, !isPresentingPrivacyOptions else { return }
-        placements.removeAll { $0.banner == nil || $0.controller == nil }
+        guard ConfigurationManager.isBannerAdsEnabled(),
+              controller.viewIfLoaded?.window != nil, !isPresentingPrivacyOptions else { return }
+        placements.removeAll { $0.controller == nil }
         let placement: Placement
         if let existing = placements.first(where: { $0.banner === banner }) {
             placement = existing
+        } else if let existing = placements.first(where: { $0.controller === controller && $0.table === table }) {
+            placement = existing
+            placement.banner = banner
+            placement.requestedSize = nil
         } else {
             placement = Placement(banner: banner, controller: controller, table: table)
             placements.append(placement)
@@ -145,7 +169,7 @@ final class AdMobManager {
                   !isPresentingPrivacyOptions,
                   ConsentInformation.shared.canRequestAds else { return }
             await startSDK()
-            guard canDisplayAds, controller.viewIfLoaded?.window != nil else { return }
+            guard ConfigurationManager.isBannerAdsEnabled(), canDisplayAds, controller.viewIfLoaded?.window != nil else { return }
 
             let width = floor((table?.bounds.width ?? controller.view.bounds.width)
                 - controller.view.safeAreaInsets.left - controller.view.safeAreaInsets.right)
@@ -156,6 +180,15 @@ final class AdMobManager {
             banner.adSize = size
             banner.load(Request())
         }
+    }
+
+    func prepareForAds(from controller: UIViewController) async -> Bool {
+        guard controller.viewIfLoaded?.window != nil, !isPresentingPrivacyOptions else { return false }
+        await prepare(from: controller)
+        guard canDisplayAds, controller.presentedViewController == nil,
+              controller.viewIfLoaded?.window != nil else { return false }
+        await startSDK()
+        return canDisplayAds && controller.viewIfLoaded?.window != nil
     }
 
     private func prepare(from controller: UIViewController) async {
@@ -200,7 +233,7 @@ final class AdMobManager {
         }
         guard table.tableFooterView?.accessibilityIdentifier != "adPrivacyOptions" else { return }
         let button = UIButton(type: .system)
-        button.setTitle("Απόρρητο διαφημίσεων", for: .normal)
+        button.setTitle(String(localized: "Ad privacy"), for: .normal)
         button.accessibilityIdentifier = "adPrivacyOptions"
         button.frame = CGRect(x: 0, y: 0, width: table.bounds.width, height: 52)
         button.addAction(UIAction { [weak self, weak controller = placement.controller] _ in
@@ -213,22 +246,23 @@ final class AdMobManager {
     func presentPrivacyOptions(from controller: UIViewController) {
         guard privacyOptionsRequired, !isPresentingPrivacyOptions else { return }
         isPresentingPrivacyOptions = true
+        ContinueReadingInterstitial.shared.invalidate()
         Task {
             do {
                 try await ConsentForm.presentPrivacyOptionsForm(from: controller)
             } catch {
-                let alert = UIAlertController(title: "Απόρρητο διαφημίσεων", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                let alert = UIAlertController(title: String(localized: "Ad privacy"), message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: String(localized: "OK"), style: .default))
                 controller.present(alert, animated: true)
             }
             // Discard old creatives after a privacy choice and refresh visible placements.
             for placement in placements {
                 placement.requestedSize = nil
+                updatePrivacyButton(for: placement)
                 guard let banner = placement.banner else { continue }
                 banner.removeFromSuperview()
                 banner.delegate?.bannerView?(banner, didFailToReceiveAdWithError:
                     NSError(domain: "AdMobPrivacyChanged", code: 0))
-                updatePrivacyButton(for: placement)
             }
             isPresentingPrivacyOptions = false
             for placement in placements {

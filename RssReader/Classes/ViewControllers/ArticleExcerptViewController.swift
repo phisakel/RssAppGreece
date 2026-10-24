@@ -16,6 +16,7 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var headerView:ArticleHeaderView!
 
     var article: Article?
+    private var isOpeningArticle = false
     
     // Header view configuration
     fileprivate var defaultTableHeaderHeight:CGFloat = 250.0
@@ -42,11 +43,17 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        isOpeningArticle = false
         loadAdBanner()
+        ContinueReadingInterstitial.shared.preload(from: self)
     }
 
     private func loadAdBanner() {
-        guard ConfigurationManager.isDetailViewAdsEnabled(), let banner = adBannerView else { return }
+        guard ConfigurationManager.isDetailViewAdsEnabled() else {
+            AdMobManager.shared.registerPrivacyOptions(from: self, table: tableView)
+            return
+        }
+        guard let banner = adBannerView else { return }
         AdMobManager.shared.load(banner, from: self, table: tableView)
     }
 
@@ -195,7 +202,7 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
             let headerCell = tableView.dequeueReusableCell(withIdentifier: "HeaderCell", for: indexPath) as! ArticleMetaViewCell
             headerCell.titleLabel.text = article?.title
             if let authorName = article?.authorName {
-                headerCell.authorLabel.text = (authorName == "") ? "" : "BY \(authorName)".uppercased()
+                headerCell.authorLabel.text = (authorName == "") ? "" : String(localized: "By \(authorName)", comment: "Article byline; publisher-provided author name")
             }
             
             return headerCell
@@ -274,6 +281,20 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     
+    @IBAction func continueReadingTapped(_ sender: UIButton) {
+        guard !isOpeningArticle, presentedViewController == nil else { return }
+        isOpeningArticle = true
+        ContinueReadingInterstitial.shared.continueReading(from: self) { [weak self] in
+            guard let self else { return }
+            guard viewIfLoaded?.window != nil, presentedViewController == nil else {
+                isOpeningArticle = false
+                return
+            }
+            isOpeningArticle = true
+            performSegue(withIdentifier: "showArticle", sender: self)
+        }
+    }
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -355,7 +376,7 @@ class ArticleExcerptViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: - Google Admob
     
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        guard AdMobManager.shared.canDisplayAds else { return }
+        guard ConfigurationManager.isDetailViewAdsEnabled(), AdMobManager.shared.canDisplayAds else { return }
         // Keep the reader's scroll position when an ad refreshes.
         bannerView.frame.size = bannerView.adSize.size
         let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: bannerView.bounds.height))

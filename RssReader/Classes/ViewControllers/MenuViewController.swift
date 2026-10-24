@@ -26,17 +26,13 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         tableView.sectionHeaderTopPadding = 0
         
-        let menuBackground = UIColor { traits in
-            if traits.userInterfaceStyle == .dark { return .systemGroupedBackground }
-            return ConfigurationManager.defaultTheme().lowercased() == "dark"
-                ? FlatColor.darkOrange.color() : FlatColor.brightYellow.color()
-        }
+        let menuBackground = FlatColor.feedMenuBackgroundColor()
         tableView.backgroundColor = menuBackground
         headerView.backgroundColor = menuBackground
         view.backgroundColor = menuBackground
         closeButton?.setImage(UIImage(systemName: "xmark"), for: .normal)
         closeButton?.tintColor = .label
-        closeButton?.accessibilityLabel = "Close feeds"
+        closeButton?.accessibilityLabel = String(localized: "Close feeds")
 
         isSectionExpanded = [Bool](repeating: false, count: feedsURLs.count)
         
@@ -92,7 +88,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SectionHeaderView") as! SectionHeaderView
         
-        headerView.titleButton.setTitle(feedsURLs[section]["name"], for: UIControl.State())
+        headerView.titleButton.setTitle(ConfigurationManager.displayName(for: feedsURLs[section]), for: UIControl.State())
         headerView.titleButton.titleLabel?.font = UIFontMetrics(forTextStyle: .headline)
             .scaledFont(for: .systemFont(ofSize: 20, weight: .semibold))
         headerView.titleButton.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -110,11 +106,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         cell.label.textColor = .label
         cell.contentView.backgroundColor = .clear
-        cell.backgroundColor = UIColor { traits in
-            if traits.userInterfaceStyle == .dark { return .secondarySystemGroupedBackground }
-            return ConfigurationManager.defaultTheme().lowercased() == "dark"
-                ? FlatColor.paleOrange.color() : FlatColor.paleYellow.color()
-        }
+        cell.backgroundColor = FlatColor.feedMenuRowBackgroundColor()
 
         // Get category and display the category feeds
         if let category = feedsURLs[indexPath.section]["name"] {

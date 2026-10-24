@@ -24,10 +24,10 @@ enum FeedSubscriptionError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidURL: return "Enter an HTTP or HTTPS RSS feed URL."
-        case .invalidFeed: return "This URL does not contain a valid RSS or Atom feed."
-        case .duplicate: return "This feed is already in your menu."
-        case .httpError(let status): return "The feed server returned HTTP \(status). Please check the URL."
+        case .invalidURL: return String(localized: "Enter an HTTP or HTTPS RSS feed URL.")
+        case .invalidFeed: return String(localized: "This URL does not contain a valid RSS or Atom feed.")
+        case .duplicate: return String(localized: "This feed is already in your menu.")
+        case .httpError(let status): return String(localized: "The feed server returned HTTP \(status). Please check the URL.", comment: "Feed validation error; HTTP status code")
         }
     }
 }

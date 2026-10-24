@@ -152,11 +152,11 @@ class SideMenuViewController: UITableViewController, SectionHeaderViewDelegate {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SidebarSectionHeaderView") as! SectionHeaderView
         
         headerView.titleButton.titleLabel?.font = UIFont.systemFont(ofSize: 16.0)
-        headerView.titleButton.setTitle(feedsURLs[section]["name"], for: UIControl.State())
+        headerView.titleButton.setTitle(ConfigurationManager.displayName(for: feedsURLs[section]), for: UIControl.State())
         headerView.sectionID = section
         headerView.delegate = self
         
-        let titleColor: UIColor = headerView.titleButton.titleLabel?.text == currentFeed?.title ? .systemBlue : .label
+        let titleColor: UIColor = feedsURLs[section]["name"] == currentFeed?.title ? .systemBlue : .label
         headerView.titleButton.setTitleColor(titleColor, for: .normal)
 
         return headerView

@@ -45,14 +45,14 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
             articleCell.titleLabel.text = article.title
 
             if let authorName = article.authorName {
-                articleCell.authorLabel.text = (authorName == "") ? "" : "BY \(authorName)".uppercased()
+                articleCell.authorLabel.text = (authorName == "") ? "" : String(localized: "By \(authorName)", comment: "Article byline; publisher-provided author name")
             }
             
             articleCell.categoryLabel.text = article.categories.first?.uppercased()
             
             // Display article date
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM dd HH:mm"
+            dateFormatter.setLocalizedDateFormatFromTemplate("MMMdjmm")
             articleCell.dateTimeLabel.text = dateFormatter.string(from: article.publicationDate as Date)
             
             // If the comment count is zero, hide the comment label
@@ -194,7 +194,7 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
         var feedsItems = [DropdownMenuItem]()
         
         for feed in self.feedsURLs {
-            let title = feed["name"]
+            let title = ConfigurationManager.displayName(for: feed)
             let url = feed["url"]
             
             var item = DropdownMenuItem(title: title, image: UIImage(), highlightedImage: UIImage(), action: { [unowned self] (item: REMenuItem!) -> Void in
@@ -230,7 +230,11 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
     }
 
     private func loadAdBanner() {
-        guard ConfigurationManager.isHomeScreenAdsEnabled(), let banner = adBannerView else { return }
+        guard ConfigurationManager.isHomeScreenAdsEnabled() else {
+            AdMobManager.shared.registerPrivacyOptions(from: self, table: tableView)
+            return
+        }
+        guard let banner = adBannerView else { return }
         AdMobManager.shared.load(banner, from: self, table: tableView)
     }
 
@@ -241,7 +245,7 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
                 self?.currentFeeds = (title: feed.name, url: feed.url)
             }
         })
-        navigationItem.rightBarButtonItem?.accessibilityLabel = "Add RSS Feed"
+        navigationItem.rightBarButtonItem?.accessibilityLabel = String(localized: "Add RSS Feed")
         
         // Get the first feed in the list
         currentFeeds = (title: feedsURLs[0]["name"]!, url: feedsURLs[0]["url"]!)
@@ -374,8 +378,8 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
             print("Error: \(error.localizedDescription)", terminator: "")
             
             // Display alert
-            let alertController = UIAlertController(title: "Download Error", message: "Failed to retrieve articles from \(title!). Please try again later.", preferredStyle: UIAlertController.Style.alert)
-            let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
+            let alertController = UIAlertController(title: String(localized: "Download Error"), message: String(localized: "Failed to retrieve articles from \(title ?? ""). Please try again later.", comment: "Download error; feed name"), preferredStyle: UIAlertController.Style.alert)
+            let okAction = UIAlertAction(title: String(localized: "OK"), style: UIAlertAction.Style.cancel, handler: nil)
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
 
@@ -400,9 +404,9 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
     @objc func refreshTableView() {
         // Update last-update date
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM d, h:mm a"
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMMdjmm")
         let currentDateTime = dateFormatter.string(from: Date())
-        refreshControl?.attributedTitle = NSAttributedString(string: "Last Updated: \(currentDateTime)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        refreshControl?.attributedTitle = NSAttributedString(string: String(localized: "Last Updated: \(currentDateTime)", comment: "Refresh status; formatted date and time"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         
         loadTableView(currentFeeds?.url, title: currentFeeds?.title)
     }
@@ -435,7 +439,7 @@ class FeedsViewController: UITableViewController, BannerViewDelegate, SceneFeedR
     // MARK: - Google Admob
     
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        guard AdMobManager.shared.canDisplayAds else { return }
+        guard ConfigurationManager.isHomeScreenAdsEnabled(), AdMobManager.shared.canDisplayAds else { return }
         // Keep the reader's scroll position when an ad refreshes.
         bannerView.frame.size = bannerView.adSize.size
         let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: bannerView.bounds.height))

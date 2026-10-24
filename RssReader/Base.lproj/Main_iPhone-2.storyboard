@@ -94,7 +94,8 @@
                                     <constraint firstAttribute="width" constant="38" id="vjF-2w-msG"/>
                                 </constraints>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="cancel">
+                                <accessibility key="accessibilityConfiguration" label="Close"/>
+                                        <state key="normal" image="cancel">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -114,7 +115,8 @@
                                     <constraint firstAttribute="height" constant="38" id="CRm-JS-8hX"/>
                                 </constraints>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" image="share">
+                                <accessibility key="accessibilityConfiguration" label="Share"/>
+                                        <state key="normal" image="share">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>

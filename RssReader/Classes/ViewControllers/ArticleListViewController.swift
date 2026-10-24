@@ -86,7 +86,11 @@ class ArticleListViewController: UIViewController, UITableViewDelegate, UITableV
     }
 
     private func loadAdBanner() {
-        guard ConfigurationManager.isHomeScreenAdsEnabled(), let banner = adBannerView else { return }
+        guard ConfigurationManager.isHomeScreenAdsEnabled() else {
+            AdMobManager.shared.registerPrivacyOptions(from: self, table: tableView)
+            return
+        }
+        guard let banner = adBannerView else { return }
         AdMobManager.shared.load(banner, from: self, table: tableView)
     }
 
@@ -154,7 +158,7 @@ class ArticleListViewController: UIViewController, UITableViewDelegate, UITableV
         navHeaderView.titleLabel.isHidden = true
         navHeaderView.menuButton.isHidden = true
         navHeaderView.backgroundColor = .systemBackground
-        let host = UIHostingController(rootView: makeFeedToolbar(title: feedsURLs[0]["name"] ?? "Feeds"))
+        let host = UIHostingController(rootView: makeFeedToolbar(title: feedsURLs[0]["name"] ?? String(localized: "Feeds")))
         toolbarHost = host
         addChild(host)
         host.view.backgroundColor = .clear
@@ -299,7 +303,7 @@ class ArticleListViewController: UIViewController, UITableViewDelegate, UITableV
             
             thumbnailCell.titleLabel.text = article.title
             if let authorName = article.authorName {
-                thumbnailCell.authorLabel.text = (authorName == "") ? "" : "BY \(authorName)".uppercased()
+                thumbnailCell.authorLabel.text = (authorName == "") ? "" : String(localized: "By \(authorName)", comment: "Article byline; publisher-provided author name")
             }
             
             if let articleImageURL = article.headerImageURL {
@@ -351,7 +355,7 @@ class ArticleListViewController: UIViewController, UITableViewDelegate, UITableV
             descriptionCell.titleLabel.text = article.title
 
             if let authorName = article.authorName {
-                descriptionCell.authorLabel.text = (authorName == "") ? "" : "BY \(authorName)".uppercased()
+                descriptionCell.authorLabel.text = (authorName == "") ? "" : String(localized: "By \(authorName)", comment: "Article byline; publisher-provided author name")
             }
             
             descriptionCell.descriptionLabel.text = article.description?.replacingOccurrences(of: "\n", with: "").trimmingCharacters(in: CharacterSet.whitespaces)
@@ -446,8 +450,8 @@ class ArticleListViewController: UIViewController, UITableViewDelegate, UITableV
             print("Error: \(error.localizedDescription)", terminator: "")
             
             // Display alert
-            let alertController = UIAlertController(title: "Download Error", message: "Failed to retrieve articles from \(title!). Please try again later.", preferredStyle: UIAlertController.Style.alert)
-            let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
+            let alertController = UIAlertController(title: String(localized: "Download Error"), message: String(localized: "Failed to retrieve articles from \(title ?? ""). Please try again later.", comment: "Download error; feed name"), preferredStyle: UIAlertController.Style.alert)
+            let okAction = UIAlertAction(title: String(localized: "OK"), style: UIAlertAction.Style.cancel, handler: nil)
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
             
@@ -498,12 +502,12 @@ class ArticleListViewController: UIViewController, UITableViewDelegate, UITableV
 
             headerView.titleLabel.text = article.title
             if let authorName = article.authorName {
-                headerView.authorLabel.text = (authorName == "") ? "" : "BY \(authorName)".uppercased()
+                headerView.authorLabel.text = (authorName == "") ? "" : String(localized: "By \(authorName)", comment: "Article byline; publisher-provided author name")
             }
             headerView.columnLabel.text = (article.categories.count > 0) ? article.categories[0].uppercased() : ""
         } else {
             headerView.imageView.image = nil
-            headerView.titleLabel.text = "No articles yet"
+            headerView.titleLabel.text = String(localized: "No articles yet")
             headerView.authorLabel.text = ""
             headerView.columnLabel.text = ""
         }
@@ -634,7 +638,7 @@ class ArticleListViewController: UIViewController, UITableViewDelegate, UITableV
     // MARK: - Google Admob
     
     func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-        guard AdMobManager.shared.canDisplayAds else { return }
+        guard ConfigurationManager.isHomeScreenAdsEnabled(), AdMobManager.shared.canDisplayAds else { return }
         // Keep the reader's scroll position when an ad refreshes.
         bannerView.frame.size = bannerView.adSize.size
         let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: bannerView.bounds.height))
