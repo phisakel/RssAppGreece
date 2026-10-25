@@ -13,3 +13,5 @@ MigrationBackup/
 firebase-debug.log
 firebase-debug.*.log
 /screenshots
+/.playwright-cli
+/output

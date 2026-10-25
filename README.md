@@ -2,6 +2,8 @@
 
 Requires Xcode 16 or newer and iOS 18.0 or newer. Open `RssReader.xcodeproj` (the workspace also opens the same project). Xcode resolves Swift Package Manager dependencies automatically; CocoaPods and Ruby are no longer required.
 
+https://rss-greece-privacy.web.app
+
 ## Dependencies
 
 - SDWebImage 5.21.5 and Google Mobile Ads 13.11.0 use their official SPM packages. `Package.resolved` pins the resolved versions, including Google's User Messaging Platform dependency.
@@ -21,7 +23,7 @@ RSS Greece was added to AdMob as an unpublished app because App Store lookup for
 
 ## Privacy-policy website
 
-The Greek/English policy is published at **https://rss-greece-privacy.web.app/privacy**, with **philipsoft@icloud.com** as the support/privacy contact. Firebase project **RSS Greece** (`rss-greece-privacy`) contains the registered web app **RSS Greece Privacy**. The static page uses Firebase Hosting, without Firebase client SDKs or website analytics. Source is in `web/privacy.html`; `.firebaserc` selects the project and `firebase.json` configures Hosting. The root URL serves the Greek app website; `/en` serves its English version. Source is in `web/index.html`, `web/en.html`, and `web/site.css`. The Greek/English copyright page is at **https://rss-greece-privacy.web.app/copyright**, with source in `web/copyright.html`.
+The Greek/English policy is published at **https://rss-greece-privacy.web.app/privacy**, with **philipsoft@icloud.com** as the support/privacy contact. Firebase project **RSS Greece** (`rss-greece-privacy`) contains the registered web app **RSS Greece Privacy**. The static page uses Firebase Hosting, without Firebase client SDKs or website analytics. Source is in `web/privacy.html`; `.firebaserc` selects the project and `firebase.json` configures Hosting. The root URL serves the Greek app website; `/en` serves its English version. Source is in `web/index.html`, `web/en.html`, and `web/site.css`. The Greek/English copyright page is at **https://rss-greece-privacy.web.app/copyright**, with source in `web/copyright.html`. Both homepage galleries include a fourth screenshot showing a full publisher article in the iPhone Duo web view, sourced from `screenshots/duo/raw/en-US/04-reading.png` and exported as `web/assets/reading-duo.jpg`. The gallery uses four columns on desktop and two on mobile.
 
 To update the public page after editing its source:
 
