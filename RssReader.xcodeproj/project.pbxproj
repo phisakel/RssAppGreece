@@ -77,6 +77,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A34F00000000000000000001 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config/Debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		A34F00000000000000000002 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config/Release.xcconfig; sourceTree = SOURCE_ROOT; };
 		023509ED40AECA1A64EC5FEF /* ArticleStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ArticleStore.swift; path = RssReader/Classes/SharedInstances/ArticleStore.swift; sourceTree = "<group>"; };
 		0870BF8FA6AB4990B0BE0DEE /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		0B351A3BDCEC44F8849EA59D /* FeedSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedSubscription.swift; path = RssReader/Classes/Models/FeedSubscription.swift; sourceTree = "<group>"; };
@@ -474,6 +476,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F25377381A1E149D008B1171 /* Build configuration list for PBXNativeTarget "RssReader" */;
 			buildPhases = (
+				A34F00000000000000000003 /* Validate AdMob configuration */,
 				F25377151A1E149D008B1171 /* Sources */,
 				F25377161A1E149D008B1171 /* Frameworks */,
 				F25377171A1E149D008B1171 /* Resources */,
@@ -588,6 +591,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A34F00000000000000000003 /* Validate AdMob configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			outputPaths = ();
+			name = "Validate AdMob configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$CONFIGURATION\" = Release ]; then\n    for name in RSS_ADMOB_APP_ID RSS_ADMOB_BANNER_UNIT_ID RSS_ADMOB_INTERSTITIAL_UNIT_ID; do\n		value=$(/usr/bin/printenv \"$name\")\n		case \"$name\" in\n			RSS_ADMOB_APP_ID) pattern='^ca-app-pub-[0-9]{16}~[0-9]{10}$' ;;\n			*) pattern='^ca-app-pub-[0-9]{16}/[0-9]{10}$' ;;\n		esac\n		if ! printf '%s' \"$value\" | /usr/bin/grep -Eq \"$pattern\"; then\n			echo \"error: Set $name in Config/Secrets.xcconfig or through scripts/with-admob-env.sh.\"\n			exit 1\n		fi\n		case \"$value\" in\n			ca-app-pub-3940256099942544*) echo \"error: $name must be a production identifier for Release builds.\"; exit 1 ;;\n		esac\n    done\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F25377151A1E149D008B1171 /* Sources */ = {
@@ -824,6 +842,7 @@
 		};
 		F25377391A1E149D008B1171 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A34F00000000000000000001 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -856,6 +875,7 @@
 		};
 		F253773A1A1E149D008B1171 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A34F00000000000000000002 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

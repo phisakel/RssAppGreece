@@ -1,0 +1,5 @@
+// Supply production values locally or through scripts/with-admob-env.sh.
+RSS_ADMOB_APP_ID =
+RSS_ADMOB_BANNER_UNIT_ID =
+RSS_ADMOB_INTERSTITIAL_UNIT_ID =
+#include? "Secrets.xcconfig"

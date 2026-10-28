@@ -1,0 +1,4 @@
+// Google sample app ID. Debug ad units are selected in ConfigurationManager.
+RSS_ADMOB_APP_ID = ca-app-pub-3940256099942544~1458002511
+RSS_ADMOB_BANNER_UNIT_ID = ca-app-pub-3940256099942544/2435281174
+RSS_ADMOB_INTERSTITIAL_UNIT_ID = ca-app-pub-3940256099942544/4411468910

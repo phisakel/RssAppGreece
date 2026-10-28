@@ -15,3 +15,10 @@ firebase-debug.*.log
 /screenshots
 /.playwright-cli
 /output
+
+# Local environment and production configuration
+.env
+.env.*
+!.env.example
+Config/Secrets.xcconfig
+Config/firebase.env

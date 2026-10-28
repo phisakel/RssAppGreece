@@ -24,8 +24,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>BannerAdsEnabled</key>
 	<false/>
+	<key>AdmobAdUnitId</key>
+	<string>$(RSS_ADMOB_BANNER_UNIT_ID)</string>
+	<key>AdmobInterstitialAdUnitId</key>
+	<string>$(RSS_ADMOB_INTERSTITIAL_UNIT_ID)</string>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-6881531620633926~8724559947</string>
+	<string>$(RSS_ADMOB_APP_ID)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>

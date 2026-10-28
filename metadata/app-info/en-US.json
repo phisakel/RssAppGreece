@@ -1,5 +1,5 @@
 {
   "name": "RSS Greece",
   "subtitle": "Greek news feeds",
-  "privacyPolicyUrl": "https://rss-greece-privacy.web.app/privacy#english"
+  "privacyPolicyUrl": "https://${FIREBASE_PROJECT_ID}.web.app/privacy#english"
 }

@@ -14,4 +14,4 @@ args=(-project RssReader.xcodeproj -scheme RssReader -destination "$destination"
 if [[ "$action" == archive ]]; then
   args+=(-configuration Release -archivePath build/RssReader.xcarchive)
 fi
-xcodebuild "${args[@]}" "$action"
+./scripts/with-admob-env.sh xcodebuild "${args[@]}" "$action"

@@ -116,7 +116,7 @@ class ConfigurationManager: NSObject {
         #if DEBUG
         return "ca-app-pub-3940256099942544/4411468910"
         #else
-        return sharedConfigurationManager().configuration?.object(forKey: "AdmobInterstitialAdUnitId") as? String ?? ""
+        return Bundle.main.object(forInfoDictionaryKey: "AdmobInterstitialAdUnitId") as? String ?? ""
         #endif
     }
 
@@ -128,7 +128,7 @@ class ConfigurationManager: NSObject {
         #if DEBUG
         return "ca-app-pub-3940256099942544/2435281174"
         #else
-        return ConfigurationManager.sharedConfigurationManager().configuration?.object(forKey: "AdmobAdUnitId") as? String ?? ""
+        return Bundle.main.object(forInfoDictionaryKey: "AdmobAdUnitId") as? String ?? ""
         #endif
     }
 
